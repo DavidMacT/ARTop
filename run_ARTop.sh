@@ -20,8 +20,8 @@ done < "$file"
 
 
 cd
-inputdir=${array[10]}/Data/AR_${array[0]}/input_images
-outputdir=${array[10]}/Data/AR_${array[0]}/output
+inputdir=${array[11]}/Data/AR_${array[0]}/input_images
+outputdir=${array[11]}/Data/AR_${array[0]}/output
 
 
 # make input files
@@ -33,7 +33,7 @@ mkdir -p $outputdir
 
 
 # download the magnetogram data
-python $script_path/source/python/MagDown.py ${array[0]} ${array[1]} ${array[2]} ${array[3]} ${array[4]} ${array[5]} ${array[6]} ${array[7]} ${array[8]} $inputdir $outputdir
+python $script_path/source/python/MagDown.py ${array[0]} ${array[2]} ${array[3]} ${array[4]} ${array[5]} ${array[6]} ${array[7]} ${array[8]} ${array[9]} $inputdir $outputdir
 
 # get region pixel numbers
 ny=$(tail -1 $outputdir/regionData.dat)
@@ -54,7 +54,7 @@ python $script_path/source/python/DAVE4vm.py ${array[0]} ${array[1]} ${array[2]}
 
 
 #remove the initial download files
-if [ "${array[14]}" == "true" ]; then
+if [ "${array[15]}" == "true" ]; then
 rm -rf $inputdir
 fi
 
@@ -64,7 +64,7 @@ python $script_path/source/python/potentialbxby.py ${array[0]} 0 $endfl $nx $ny 
 
 ##-----------------------------------------------------------------------------------------------------------
 
-if [ "${array[11]}" == "true" ]; then
+if [ "${array[12]}" == "true" ]; then
 cd $main_dir
 
 echo '-------------------------------------- '
@@ -80,7 +80,7 @@ g++ -c -O3 -std=gnu++14 -std=gnu++14 -o $src/c++/mainObservationalWindingPotenti
 g++ -O3 -std=gnu++14 -o $src/c++/observationalWindingPotentialFast $src/c++/pointCheap.o $src/c++/interpolation2Large.o  $src/c++/biotSavartGauge.o $src/c++/mainObservationalWindingPotentialFast.o -fopenmp
 
 # create file for the images
-#mkdir -p ${array[10]}/Data/AR_${array[0]}/generated_images
+mkdir -p ${array[11]}/Data/AR_${array[0]}/generated_images
 
 cd $src/c++/
 
@@ -90,12 +90,14 @@ end=$(($endfl - 1))
 for i in $(seq $startfl $end)
 do
 echo $i
-echo $outputdir/Ux_${array[0]}_${array[9]}_$i.txt
-./observationalWindingPotentialFast $outputdir/Ux_${array[0]}_${array[9]}_$i.txt $outputdir/Uy_${array[0]}_${array[9]}_$i.txt $outputdir/Uz_${array[0]}_${array[9]}_$i.txt $outputdir/bx_${array[0]}_$i.txt $outputdir/by_${array[0]}_$i.txt $outputdir/bz_${array[0]}_$i.txt $nx $ny 360 360 ${array[12]} $outputdir/Bxp_${array[0]}_$i.txt $outputdir/Byp_${array[0]}_$i.txt $outputdir/windDatPotentialFastCO${array[12]}_VS${array[9]}_${array[13]}_$i.dat ${array[13]}
-
-
-# plotting
-#anaconda3-launch python $script_path/source/python/plotting.py $nx $ny $outputdir/windDatPotentialFastCO${array[12]}_VS${array[9]}_${array[13]}_$i.dat ${array[10]}/Data/AR_${array[0]}/generated_images
-
+#echo $outputdir/Ux_${array[0]}_${array[10]}_$i.txt
+./observationalWindingPotentialFast $outputdir/Ux_${array[0]}_${array[10]}_$i.txt $outputdir/Uy_${array[0]}_${array[10]}_$i.txt $outputdir/Uz_${array[0]}_${array[10]}_$i.txt $outputdir/bx_${array[0]}_$i.txt $outputdir/by_${array[0]}_$i.txt $outputdir/bz_${array[0]}_$i.txt $nx $ny 360 360 ${array[13]} $outputdir/Bxp_${array[0]}_$i.txt $outputdir/Byp_${array[0]}_$i.txt $outputdir/windDatPotentialFastCO${array[13]}_VS${array[10]}_${array[14]}_$i.dat ${array[14]}
 done
+
+#integrated variables
+for i in $(seq $startfl $end)
+do
+tail -10 $outputdir/windDatPotentialFastCO${array[13]}_VS${array[10]}_${array[14]}_$i.dat >> $outputdir/netWindDatPotFast${array[13]}_VS${array[10]}_${array[14]}_$end.dat
+done
+
 fi
