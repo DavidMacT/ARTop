@@ -1,6 +1,7 @@
 import create_timeseries
 import plotting
 import numpy as np
+import goes
 
 # region details
 regionName = '956'
@@ -36,6 +37,25 @@ mstd = mean + 3*std
 overplot_variables = [deltaL,mean,mstd]
 colour = ['c-','r-','b:']
 label = ['$\dot{\delta L}$', '$\mu(\dot{\delta L})$', '$\mu+3\sigma$']
+# uncomment if you want a plot without flare times
+#create_timeseries.plot(time,overplot_variables,colour,label,r'$\dot{\delta L}$' + 'cm^4 s', 'times series example',path,filename_sr,unit='h',save=True)
 
+# overplot flare times and type from GOES data
+# select start and end times for GOES data (these should match the times of your time series)
+start_time = "2015-06-21 00:00"
+end_time = "2015-06-22 00:00"
 
-create_timeseries.plot(time,overplot_variables,colour,label,r'$\dot{\delta L}$' + 'cm^4 s', 'times series example',path,filename_sr,unit='h',save=True)
+# get data from the correct satellite (this will be GOES 15, 16 or 17)
+flares = goes.goes_xray(start_time,end_time,SatelliteNumber = 15)
+
+# get the data
+picked_time, fluxA, fluxB = flares.get_data()
+
+# plot the X-ray times series
+# flares.plot_xray(picked_time,fluxA,fluxB)
+
+# find the X-ray peaks (flare times) and select the class (C, M or X)
+pt, pv = flares.xray_peaks(fluxB,'M')
+
+# overplot the flare times on the time series
+create_timeseries.plot(time,overplot_variables,colour,label,r'$\dot{\delta L}$' + 'cm$^4$ s', 'times series example',path,filename_sr,unit='h',Xray_class=pt,save=True)

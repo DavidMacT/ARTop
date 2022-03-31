@@ -146,6 +146,6 @@ while(start_time <end_time):
             M=M+1
             d=1
     start_time = datetime.datetime(int(st_y),M,d,H,int(00),int(00))
-    print('Ending time is ',start_time)        
+    print('Hour mark: ',start_time)        
 
 

@@ -13,7 +13,7 @@ Output directory=/home/dmac/test_codes,
 Topology=true,
 Cutoff=50,
 Sampling=1,
-remove_downloaded_images=false,
+Remove_downloaded_images=false,
 
 Note, 
 -----.
