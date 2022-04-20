@@ -42,10 +42,10 @@ Create time series
 
 TS = win.timeseries(activeRegion, path_)
 
-L = TS.read_data( 'totWind_Cur_Pot_Vel')
+L = TS.read_data( 'totWind')
 deltaL = TS.read_data('deltaLflux')
 
-intL, time = TS.integrate_accum('totWind_Cur_Pot_Vel',dt)
+intL, time = TS.integrate_accum('totWind',dt)
 
 
 # scale factors

@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Sat Apr  2 12:46:46 2022
 
-@author: khd2
-"""
 import matplotlib.pyplot as plt 
 import numpy as np
 import os
@@ -88,8 +84,8 @@ class mapping:
                 'helvalCur': [],
                 'windvalPot': [],
                 'helvalPot': [],
-                'windvalVelOnly': [],
-                'helvalVelOnly': [],
+                'windvalBraidOnly': [],
+                'helvalBraidOnly': [],
                 'wind': [],
                 'hel': [],
                 'deltaLflux': [],
@@ -108,8 +104,8 @@ class mapping:
                 variables['helvalCur'].append(float(r[6]))
                 variables['windvalPot'].append(float(r[7]))
                 variables['helvalPot'].append(float(r[8]))
-                variables['windvalVelOnly'].append(float(r[9]))
-                variables['helvalVelOnly'].append(float(r[10]))
+                variables['windvalBraidOnly'].append(float(r[9]))
+                variables['helvalBraidOnly'].append(float(r[10]))
                 variables['wind'].append(float(r[11]))
                 variables['hel'].append(float(r[12]))
                 variables['deltaLflux'].append(float(r[13]))
@@ -209,10 +205,10 @@ class timeseries:
                                 'totHelCur':[],
                                 'totWindPot':[],
                                 'totHelPot':[],
-                                'totWindVel':[],
-                                'totHelVel':[],
-                                'totWind_Cur_Pot_Vel':[],                              # totWindCur + totWindPot - totWindVel
-                                'totHel_Cur_Pot_Vel':[],                               # totHelCur + totHelPot - totHelVel
+                                'totWindBraid':[],
+                                'totHelBraid':[],
+                                'totWind':[],                              # totWindCur + totWindPot - totWindVel
+                                'totHel':[],                               # totHelCur + totHelPot - totHelVel
                                 'deltaLflux':[],
                                 'deltaHflux':[]
                                 }
@@ -226,10 +222,10 @@ class timeseries:
             upscale_missing_values['totHelCur'].append(float(values[i+1]))
             upscale_missing_values['totWindPot'].append(float(values[i+2]))
             upscale_missing_values['totHelPot'].append(float(values[i+3]))
-            upscale_missing_values['totWindVel'].append(float(values[i+4]))
-            upscale_missing_values['totHelVel'].append(float(values[i+5]))
-            upscale_missing_values['totWind_Cur_Pot_Vel'].append(float(values[i+6]))
-            upscale_missing_values['totHel_Cur_Pot_Vel'].append(float(values[i+7]))
+            upscale_missing_values['totWindBraid'].append(float(values[i+4]))
+            upscale_missing_values['totHelBraid'].append(float(values[i+5]))
+            upscale_missing_values['totWind'].append(float(values[i+6]))
+            upscale_missing_values['totHel'].append(float(values[i+7]))
             upscale_missing_values['deltaLflux'].append(float(values[i+8]))
             upscale_missing_values['deltaHflux'].append(float(values[i+9]))
     
