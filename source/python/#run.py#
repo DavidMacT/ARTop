@@ -23,8 +23,8 @@ Create a map
 
 Map =win.mapping(activeRegion,path_)
 
-sz = Map.read_data('sz', filenumber)
-Map.plotmap(sz,title=r'$S_z$')
+bz = Map.read_data('bz', filenumber)
+Map.plotmap(bz,title=r'$B_z$')
 
 ## Creat gif file
 ##---------------
@@ -99,7 +99,7 @@ Plot SDO map
 <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 '''
 
-
+'''
 location = 'N20W18'
 start = '2011-10-15 04:00:00'
 end = '2011-10-15 06:00:00'
@@ -109,4 +109,4 @@ Ob.get_map(graphs=['1600', '171','hmi'])
 Ob.plot()
 required_levels = [20, 100, 140, 300, 500]
 Ob.plot(field_strength_spots = '1600', level=required_levels)
-
+'''

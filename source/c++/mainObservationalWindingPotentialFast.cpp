@@ -96,6 +96,7 @@ Read in the files
   }else{
     std::cout<<"invalid  vz file\n";
   }
+  
   // bx file
 
   std::vector<std::vector<double> > bx(nx,std::vector<double>(ny,0.0));
@@ -146,7 +147,6 @@ Read in the files
     std::cout<<"invalid  bx pot file\n";
   }
 
-  
   // by file
 
   std::vector<std::vector<double> > by(nx,std::vector<double>(ny,0.0));
@@ -236,9 +236,9 @@ Read in the files
   std::vector<std::vector<point> > photosphereRPotField;
 
 
-  // std::cout<<vx.size()<<" "<<vx.size()<<"\n";
-  //apply the field line extraction.
-  for(int i=0;i<nx;i++){
+  // projection
+
+ for(int i=0;i<nx;i++){
     for(int j=0;j<ny;j++){
       double bsqx = bx[i][j]*bx[i][j];
       double bsqy = by[i][j]*by[i][j];
@@ -316,48 +316,10 @@ Read in the files
     photosphereRFieldCurSlice.clear();photosphereRFieldPotSlice.clear();   
   }
 
-  //down sample
+  // downsample
 
   int nxSize = std::round(nx/downSampleFactor);
   int nySize = std::round(ny/downSampleFactor);
- 
-
-  // //Now fill the down sampled vectors
-  // int noXpixels=0;
-  // int noYpixels=0;
-  
-  // for(int i=0;i<nxSize;i=i+downSampleFactor){
-  //   noXpixels++;    
-  //   std::vector<point> photosphereBFieldSlice;
-  //   std::vector<point> photosphereVFieldSlice;
-  //   std::vector<point> photosphereUFieldCurSlice;
-  //   std::vector<point> photosphereRFieldCurSlice;
-  //   std::vector<point> photosphereUFieldPotSlice;
-  //   std::vector<point> photosphereRFieldPotSlice;
-  //   noYpixels;    
-  //   for(int j=0;j<nySize;j=j+downSampleFactor){
-  //     double rvXTermCur,rvYTermCur,rvXTermPot,rvYTermPot,uXTermCur,uYTermCur,uXTermPot,uYTermPot;
-  //     photosphereBFieldSlice.push_back(photosphereBFieldSliceInitial[i][j]);
-  //     photosphereVFieldSlice.push_back(photosphereVFieldSliceInitial[i][j]);
-  //     photosphereUFieldCurSlice.push_back(photosphereUFieldCurSliceInitial[i][j]);
-  //     photosphereRFieldCurSlice.push_back(photosphereRFieldCurSliceInitial[i][j]);
-  //     photosphereUFieldPotSlice.push_back(photosphereUFieldPotSliceInitial[i][j]);
-  //     photosphereRFieldPotSlice.push_back(photosphereRFieldPotSliceInitial[i][j]);
-  //     noYpixels++
-  //   }
-  //   photosphereBField.push_back(photosphereBFieldSlice);
-  //   photosphereVField.push_back(photosphereVFieldSlice);
-  //   photosphereUCurField.push_back(photosphereUFieldCurSlice);
-  //   photosphereRCurField.push_back(photosphereRFieldCurSlice);
-  //   photosphereUPotField.push_back(photosphereUFieldPotSlice);
-  //   photosphereRPotField.push_back(photosphereRFieldPotSlice);
-  //   photosphereBFieldSlice.clear();photosphereVFieldSlice.clear();
-  //   photosphereUFieldCurSlice.clear();photosphereUFieldPotSlice.clear();
-  //   photosphereRFieldCurSlice.clear();photosphereRFieldPotSlice.clear();   
-  // }
-
-  //account for dx and dy size change
-  //dx = dx*((nx*ny)/(noXpixels*noYPixels))
   
   double xmin =0.0;
   double ymin =0.0;
@@ -413,12 +375,12 @@ Read in the files
   for(int i=0;i<windingDat.size();i++){
     std::vector<double> windvals = windingDat[i];
     // the minus 1 is part of the formula.
-    double windvalCur =(-1.0)*windvals[4];
-    double helvalCur = (-1.0)*windvals[5];
-    double windvalPot =(-1.0)*windvals[6];
-    double helvalPot = (-1.0)*windvals[7];
-    double windvalVelOnly = (-1.0)*windvals[8];
-    double helvalVelOnly = (-1.0)*windvals[9];
+    double windvalCur =(-1.0)*windvals[5];
+    double helvalCur = (-1.0)*windvals[6];
+    double windvalPot =(-1.0)*windvals[7];
+    double helvalPot = (-1.0)*windvals[8];
+    double windvalVelOnly = (-1.0)*windvals[9];
+    double helvalVelOnly = (-1.0)*windvals[10];
     double wind =windvalCur+windvalPot-windvalVelOnly;
     double hel =helvalCur+helvalPot-helvalVelOnly;
     totWindCur=totWindCur+windvalCur;
@@ -429,7 +391,7 @@ Read in the files
     totHelVel=totHelVel+helvalVelOnly;
     deltaLflux=deltaLflux+(std::abs(windvalCur)-std::abs(windvalPot));
     deltaHflux=deltaHflux+(std::abs(helvalCur)-std::abs(helvalPot));
-    outfile<<windvals[0]<<" "<<windvals[1]<<" "<<windvals[2]<<" "<<windvals[3]<<" "<<windvalCur<<" "<<helvalCur<<" "<<windvalPot<<" "<<helvalPot<<" "<<windvalVelOnly<<" "<<helvalVelOnly<<" "<<wind<<" "<<hel<<" "<<deltaLflux<<" "<<deltaHflux<<"\n";
+    outfile<<windvals[0]<<" "<<windvals[1]<<" "<<windvals[2]<<" "<<windvals[3]<<" "<<windvals[4]<<" "<<windvalCur<<" "<<helvalCur<<" "<<windvalPot<<" "<<helvalPot<<" "<<windvalVelOnly<<" "<<helvalVelOnly<<" "<<wind<<" "<<hel<<" "<<deltaLflux<<" "<<deltaHflux<<"\n";
   }
   // don't forget to upscale to account for missing values
   outfile<<totWindCur*dx*dy*((nx*ny)/windingDat.size())<<"\n";

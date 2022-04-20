@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Feb  8 11:10:41 2022
 
-@author: khd2
-"""
 from scipy.fft import fftn, ifftn, fftfreq, fftshift, ifftshift
 import numpy as np
 import os

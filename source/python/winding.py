@@ -83,6 +83,7 @@ class mapping:
                 'X2':list(),
                 'bz':[],
                 'vz': [],
+                'sz': [],
                 'windvalCur': [],
                 'helvalCur': [],
                 'windvalPot': [],
@@ -102,16 +103,17 @@ class mapping:
                 variables['X2'].append(float(r[1]))
                 variables['bz'].append(float(r[2]))
                 variables['vz'].append(float(r[3]))
-                variables['windvalCur'].append(float(r[4]))
-                variables['helvalCur'].append(float(r[5]))
-                variables['windvalPot'].append(float(r[6]))
-                variables['helvalPot'].append(float(r[7]))
-                variables['windvalVelOnly'].append(float(r[8]))
-                variables['helvalVelOnly'].append(float(r[9]))
-                variables['wind'].append(float(r[10]))
-                variables['hel'].append(float(r[11]))
-                variables['deltaLflux'].append(float(r[12]))
-                variables['deltaHflux'].append(float(r[13]))
+                variables['sz'].append(float(r[4]))
+                variables['windvalCur'].append(float(r[5]))
+                variables['helvalCur'].append(float(r[6]))
+                variables['windvalPot'].append(float(r[7]))
+                variables['helvalPot'].append(float(r[8]))
+                variables['windvalVelOnly'].append(float(r[9]))
+                variables['helvalVelOnly'].append(float(r[10]))
+                variables['wind'].append(float(r[11]))
+                variables['hel'].append(float(r[12]))
+                variables['deltaLflux'].append(float(r[13]))
+                variables['deltaHflux'].append(float(r[14]))
                 
             else:
                 break
@@ -155,19 +157,26 @@ class mapping:
 
         plt.title( title, loc='center', fontsize = 16)
         if save is True:
-            plt.savefig(self.path +'/generated_images/'+ variable_name+self.filename[len(self.filename)-20:len(self.filename)-4]+'.jpg')
-    
+            self.image_name = self.path +'/generated_images/'+ variable_name+self.filename[len(self.filename)-20:len(self.filename)-4]+'.jpg'
+            plt.savefig(self.image_name)
+            plt.close()
+
+
         
-    def plot_gif(self, imagename, variable_name):
+    def plot_gif(self, im_st_No, im_ed_No,variable_name, title):
         import glob
         from PIL import Image
-
-        fp_in = self.path +'/'+ imagename 
-        fp_out = self.path + "/" + variable_name+'_'+self.regionName +".gif"
+        imgs=[]
+        fp_out = self.path +'/generated_images/' + variable_name+'_'+str(self.regionName) +".gif"
         
-        imgs = (Image.open(img) for img in sorted(glob.glob(fp_in)))
-        img = next(imgs)  # extract first image from iterator
-        img.save(fp=fp_out, format='GIF', append_images=imgs, save_all=True, duration=200, loop=0)
+        for im in range(im_st_No, im_ed_No+1):
+            image_array = self.read_data(variable_name, im)
+            self.plotmap(image_array , title, save=True, variable_name=variable_name)
+
+            imgs.append(Image.open(self.image_name))
+            os.remove(self.image_name)
+            
+        imgs[0].save(fp_out, save_all=True, append_images=imgs[1:], duration=200, loop=0)
 
 
 
@@ -188,9 +197,9 @@ class timeseries:
         return cutoff, VS, Sampling   
 
                 
-    def read_data(self, filenumber):
+    def read_data(self, variable):
         V_sampling, cutoff, Sampling = self.get_specifications()
-        self.Name_file = 'netWindDatPotFastCO'+str(cutoff)+'_VS'+str(V_sampling)+'_'+str(filenumber)+'.dat'
+        self.Name_file = 'netWindDatPotFast'+str(cutoff)+'_VS'+str(V_sampling)+'_'+str(Sampling)+'.dat'
         self.path = self.path_ +'/AR_'+str(self.regionName)
 
         Name = self.path +'/output/'+ self.Name_file
@@ -202,8 +211,8 @@ class timeseries:
                                 'totHelPot':[],
                                 'totWindVel':[],
                                 'totHelVel':[],
-                                'totWindCur+totWindPot-totWindVel':[],
-                                'totHelCur+totHelPot-totHelVel':[],
+                                'totWind_Cur_Pot_Vel':[],                              # totWindCur + totWindPot - totWindVel
+                                'totHel_Cur_Pot_Vel':[],                               # totHelCur + totHelPot - totHelVel
                                 'deltaLflux':[],
                                 'deltaHflux':[]
                                 }
@@ -219,28 +228,31 @@ class timeseries:
             upscale_missing_values['totHelPot'].append(float(values[i+3]))
             upscale_missing_values['totWindVel'].append(float(values[i+4]))
             upscale_missing_values['totHelVel'].append(float(values[i+5]))
-            upscale_missing_values['totWindCur+totWindPot-totWindVel'].append(float(values[i+6]))
-            upscale_missing_values['totHelCur+totHelPot-totHelVel'].append(float(values[i+7]))
+            upscale_missing_values['totWind_Cur_Pot_Vel'].append(float(values[i+6]))
+            upscale_missing_values['totHel_Cur_Pot_Vel'].append(float(values[i+7]))
             upscale_missing_values['deltaLflux'].append(float(values[i+8]))
             upscale_missing_values['deltaHflux'].append(float(values[i+9]))
     
-        return upscale_missing_values
+        return np.array(upscale_missing_values[variable])
 
-    def integrate(self,X,dt,st_time):
+
+    def integrate_accum(self, Vrbs, dt):
         # accumulation trapzoid
-        
         integrated=[]
-        for i in range(1,len(X)):    
-            y_right = X[1:i]                          # right endpoints
-            y_left = X[:i-1]                          # left endpoints
+        st_time = 0
+        data=[]
+        
+        data = list(self.read_data(Vrbs))
+        for i in range(1,len(data)):    
+            y_right = data[1:i]                          # right endpoints
+            y_left = data[:i-1]                          # left endpoints
             integrated.append( (dt/2) * np.sum(y_right + y_left) )   
         
-        time = np.linspace(st_time,(len(X)-1)*dt,len(integrated))     # N+1 points make N subintervals
-    
+        time = np.linspace(st_time,(len(data)-1)*dt,len(integrated))     # N+1 points make N subintervals
+
         return np.array(integrated), time   
 
-
-    def mean_std(self,Z,n_points):
+    def mean_std(self,Z, n_points, factor = 3):
         mean = []
         std = []
         com = 0
@@ -256,25 +268,25 @@ class timeseries:
             mean.append(mean[-1])
             std.append(std[-1])
     
-        return np.array(mean), np.array(std)
+        return np.array(mean), np.array(mean) + factor*np.array(std)
     
      
-    def plot(self,X,Y,color,label, ylabel,Name,unit, Xray_class = None, save=False):   
+    def plot(self,X,Y,colour,label, ylabel,Name,unit, Xray_class = None, save=False, **kwargs):   
     
         plt.rcParams.update({'font.size':16})
         plt.figure(figsize=(12, 10))
         plt.title( Name, loc='center', fontsize = 16)
-    
+        
         if unit == 'h':
             u=[3600,'hour'] 
         elif unit == 'm':
             u=[60,'minute'] 
         else:
             u=[1,'seconds'] 
-    
+
         c=0
         for v in Y:
-            plt.plot(X/u[0],v[:len(X)], color[c], linewidth=2 ,label = label[c])
+            plt.plot(X/u[0],v[:len(X)], colour[c], linewidth=2 ,label = label[c])
             c+=1
         
         if Xray_class is not None:
@@ -296,4 +308,4 @@ class timeseries:
             imagename = self.Name_file[len(self.Name_file)-20:len(self.Name_file)-4]+'.jpg'
             plt.savefig(self.path + '/generated_images/'+ imagename)
 
-
+        

@@ -109,7 +109,7 @@ class goes_xray:
     def plot_xray(self,time, data1=None, data2=None):
         stime = self.stime
         etime = self.etime    
-        level = {'A':1e-8,'B':1e-7,'c':1e-6, 'M':1e-5,'X':1e-4}
+        level = {'A':1e-8,'B':1e-7,'C':1e-6, 'M':1e-5,'X':1e-4}
     
         plt.rcParams['font.size'] = '14'
         fig, ax = plt.subplots(figsize=(8,6))

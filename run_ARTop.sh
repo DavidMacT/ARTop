@@ -23,6 +23,12 @@ cd
 inputdir=${array[11]}/Data/AR_${array[0]}/input_images
 outputdir=${array[11]}/Data/AR_${array[0]}/output
 
+# specifications
+> $outputdir/specifications.txt
+echo ${array[10]} >> $outputdir/specifications.txt
+echo ${array[13]} >> $outputdir/specifications.txt
+echo ${array[14]} >> $outputdir/specifications.txt
+
 
 # make input files
 mkdir -p $inputdir
@@ -35,6 +41,7 @@ mkdir -p $outputdir
 # download the magnetogram data
 if [ "${array[1]}" == "true" ]; then
 python $script_path/source/python/MagDown.py ${array[0]} ${array[2]} ${array[3]} ${array[4]} ${array[5]} ${array[6]} ${array[7]} ${array[8]} ${array[9]} $inputdir $outputdir
+fi
 
 # get region pixel numbers
 ny=$(tail -1 $outputdir/regionData.dat)
@@ -52,7 +59,7 @@ echo '  '
 echo 'Calculating the velocity distributions..'
 # calculate the velocity distributions
 python $script_path/source/python/DAVE4vm.py ${array[0]} ${array[2]} ${array[3]} ${array[4]} ${array[5]} ${array[6]} ${array[7]} ${array[8]} ${array[9]} $inputdir $outputdir ${array[10]}
-fi
+
 
 #remove the initial download files
 if [ "${array[15]}" == "true" ]; then
@@ -98,7 +105,7 @@ done
 #integrated variables
 for i in $(seq $startfl $end)
 do
-tail -10 $outputdir/windDatPotentialFastCO${array[13]}_VS${array[10]}_${array[14]}_$i.dat >> $outputdir/netWindDatPotFast${array[13]}_VS${array[10]}_${array[14]}_$end.dat
+tail -10 $outputdir/windDatPotentialFastCO${array[13]}_VS${array[10]}_${array[14]}_$i.dat >> $outputdir/netWindDatPotFast${array[13]}_VS${array[10]}_${array[14]}.dat
 done
 
 fi
