@@ -1,8 +1,7 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Sat Apr  2 12:46:46 2022
-@author: khaled Darwish
+Created on Sun May  1 13:21:51 2022
+@author: Khaled Darwish
 """
 import matplotlib.pyplot as plt 
 import numpy as np
@@ -290,8 +289,8 @@ class timeseries:
             for p in range(len(Xray_class[0])):
                 peak = Xray_class[0][p]
 
-                if (p==(len(Xray_class[0])-1)):
-                    plt.plot(((peak/u[0]),(peak/u[0])), (min(Y[0][:len(X)]),max(Y[0][:len(X)])), Xray_class[2], label= Xray_class[1] + ' x-ray class' )
+                if ((p==(len(Xray_class[0])-1)) or (len(Xray_class[1])>1)):
+                    plt.plot(((peak/u[0]),(peak/u[0])), (min(Y[0][:len(X)]),max(Y[0][:len(X)])), Xray_class[2], label= Xray_class[1][p] + ' x-ray class' )
                 else:
                     plt.plot(((peak/u[0]),(peak/u[0])), (min(Y[0][:len(X)]),max(Y[0][:len(X)])), Xray_class[2])
         plt.ylabel(ylabel)
