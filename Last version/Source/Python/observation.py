@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Mon Apr 18 13:01:04 2022
+Created on Thu Apr 21 09:54:01 2022
 @author: khd2
 """
-
 import matplotlib.pyplot as plt
 from datetime import timedelta
 from datetime import datetime
@@ -15,6 +14,10 @@ import os
 import requests
 from scipy.signal import find_peaks
 
+
+from datetime import timedelta
+from datetime import datetime
+
 import sunpy.map
 from sunpy.net import Fido, attrs as a
 from astropy.coordinates import SkyCoord
@@ -23,6 +26,9 @@ import sys
 
 import warnings
 warnings.filterwarnings("ignore")
+
+
+
 
 
 class goes_xray:
@@ -88,6 +94,14 @@ class goes_xray:
     
         return picked_time, picked_values1, picked_values2
     
+    def clear(self,data):
+        cl_data=[]
+        for i in data:
+            if (i<=0):
+                cl_data.append(None)
+            else:
+                cl_data.append(i)
+        return cl_data    
     
     def time_label(self):
         stime = self.stime
@@ -127,9 +141,9 @@ class goes_xray:
         fig, ax = plt.subplots(figsize=(8,6))
         
         if data1 is not None:
-            ax.plot(time,data1 ,'b', label='0.5 - 4.0'+r'$\ {\AA}$')
+            ax.plot(time,self.clear(data1) ,'b', label='0.5 - 4.0'+r'$\ {\AA}$')
         if data2 is not None:
-            ax.plot(time, data2,'r', label='1.0 - 8.0'+r'$\ {\AA}$')        
+            ax.plot(time, self.clear(data2),'r', label='1.0 - 8.0'+r'$\ {\AA}$')        
         ax.set_yscale("log")
         ax.grid(axis='y')
         ax.set_ylabel('Watts m'+r'$^{-2}$')
@@ -218,10 +232,7 @@ class goes_xray:
         peak_times =[self.picked_time[i] for i in peaks_indces]
         
         return [peak_times, xray_class,color] , peaks
-    
-    
-    
-    
+
 
 class SDO:
     def __init__(self, starttime, endtime, Location):
@@ -272,7 +283,10 @@ class SDO:
                 self.data[Wl]= Fido.fetch(result_[0, 3], site='ROB')
         return self.data
 
-
+    
+    def peek(self, spectrum):
+        spc = sunpy.map.Map(self.data[spectrum])
+        spc.plot()
 
     def plot(self, field_strength_spots=None, level=None):
         
@@ -322,3 +336,84 @@ class SDO:
             else:
                 sys.exit('datumn of '+ field_strength_spots +' is missing ... ')
 
+class NOAAreport:
+    def __init__(self,start, end):
+        c=0
+        daframe={'Event':[], 'Begin':[],'Max':[], 'End':[],
+                 'Type':[],'Loc/Frq':[], 'Particulars':[], 'Reg':[]}
+        start = datetime.date(int(start[:4]),int(start[5:7]),int(start[8:10]))
+        end = datetime.date(int(end[:4]),int(end[5:7]),int(end[8:10]))
+        while (start <= end):
+            
+            start = str(start)
+            urlpage = 'https://www.solarmonitor.org/data/'+start[:4]+'/'+start[5:7]+'/'+ start[8:10]+'/meta/noaa_events_raw_'+start[:4]+start[5:7]+start[8:10]+'.txt' 
+            
+            df = pd.read_fwf(urlpage,header=None)
+            
+            for i in range(12, len(df[0])):
+                if ((df[0][i][58]=='V') or (df[0][i][58]=='I')):
+                    continue
+                else:
+                    daframe['Event'].append(df[0][i][:4])
+                    daframe['Begin'].append(   str(int(df[0][i][11:13])+c) + df[0][i][13:15])
+                    daframe['Max'].append(  str(int(df[0][i][18:20]) +c) +df[0][i][20:23])
+                    daframe['End'].append( str(int(df[0][i][28:30]) + c) + df[0][i][30:32])
+                    daframe['Type'].append(df[0][i][43:46])
+                    daframe['Loc/Frq'].append(df[0][i][48:55])
+                    daframe['Particulars'].append(df[0][i][58:62])
+                    daframe['Reg'].append(df[0][i][76:80])
+
+            start = datetime.date(int(start[:4]),int(start[5:7]),int(start[8:10]))+ datetime.timedelta(days=1)
+            c+=24
+        self.df = pd.DataFrame(daframe)
+    def show(self):
+        return self.df
+    
+    def Filter(self,activeregion, variable):
+        region = str(activeregion)[-4:]
+        index = []
+        for i in range(len(self.df['Type'])):
+            if ((self.df['Reg'][i] == region) and (self.df['Type'][i]==variable)):
+                index.append(i)
+
+        if len(index) == 0:
+            return print('The region is not found, try another date')
+        else:
+            return self.df.iloc[index]
+
+        
+    def toseconds(self, activeregion, variable, time):
+        time_secd = [((int(i[:2])*3600)+(int(i[2:])*60)) for i in self.Filter(activeregion, variable)[time]] 
+        l=[]
+        if ((variable == 'XRA') or (variable == 'FLA')):
+            Xrayclass = [i for i in self.Filter(activeregion, variable)['Particulars']]
+            for c in range(len(Xrayclass)):
+                if Xrayclass[c][0] == 'C':
+                    l.append([time_secd[c],'g--', Xrayclass[c]])
+                if Xrayclass[c][0] == 'M':
+                    l.append([time_secd[c],'b--', Xrayclass[c]])
+                if Xrayclass[c][0] == 'X':
+                    l.append([time_secd[c],'r--', Xrayclass[c]])
+        if variable == 'FLA':
+            flare = [i for i in self.Filter(activeregion, variable)['Particulars']]
+            for c in range(len(flare)):
+                l.append([time_secd[c],'k-', 'FL'])
+        
+        return l
+
+    def combine(self,list_of_lists):
+        List=[]
+        for l in list_of_lists:
+           List += l
+        l=[]
+        for v in List:
+            l.append(v[0])
+        sortd_t = sorted(l)
+        sorted_list=[]
+        for s in sortd_t:
+            for t in range(len(List)):
+                if s == List[t][0]:
+                    sorted_list.append(List[t])
+        return sorted_list
+            
+ 
