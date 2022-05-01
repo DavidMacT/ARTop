@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Sat Apr  2 12:46:46 2022
-
-@author: khd2
+@author: khaled Darwish
 """
 import matplotlib.pyplot as plt 
 import numpy as np
