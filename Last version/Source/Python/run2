@@ -24,18 +24,6 @@ path_= '/media/khd2/Spare-Data-Disk/ARTop_winding/Data'
 Create a map
 <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 '''
-# =============================================================================
-# path = path_ + '/AR_'+str(activeRegion)
-# def getnxny(path):
-#     file = open(path+ '/output/regionData.dat')
-#     r=[]
-#     for line in file:
-#         r.append(line.split()[0])
-#     nx, ny = r[-2], r[-1]
-#     r=[]
-#     return int(nx), int(ny)
-# =============================================================================
-
 Map =win.mapping(activeRegion,path_)
 
 bz = Map.read_data('bz', filenumber)
@@ -101,15 +89,6 @@ X.plot_xray(picked_time, fluxA, fluxb)                          # plot_xray( tim
  
 pt, pv = X.xray_peaks(fluxb,'C')                                # xray_peaks(  wavelength  , x-ray class  ) 
 
-
-plt.rcParams['font.size'] = '14'
-fig, ax = plt.subplots(figsize=(8,6))
-ax.plot(np.array(picked_time),fluxA,'b', label='0.5 - 4.0'+r'$\ {\AA}$')
-ax.plot(np.array(picked_time), fluxb,'r', label='1.0 - 8.0'+r'$\ {\AA}$')     
-ax.plot(((12120),(12120)), (min(fluxb),max(fluxb)))   
-ax.set_yscale("log")
-ax.grid(axis='y')
-plt.show()
 
 ## over plot xray with the time series
 ##------------------------------------
