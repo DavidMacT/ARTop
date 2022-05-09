@@ -120,19 +120,22 @@ Plot NOAA
 start = '2017-08-28 00:00:00'
 end = '2017-09-04 00:05:00'
 
-variable = 'XRA'
-activeregion = 'AR12672'
-tr = 'Begin' 
 
 report = noaa(start,end)
-showAll = report.show()
+showAll = report.show()                                                      
 
-fltr_events = report.Filter(activeregion, variable)
-XRs = report.toseconds(activeregion, 'XRA', tr)  
+variable = 'XRA'                                                             
+activeregion = 'AR12672'                                                 # choose the desired active region number.
+tr = 'Begin'                                                             # choose the interested time of the event: Begin, Max, End
+
+fltr_events = report.Filter(activeregion, variable)                      # show a list for the selected type/variable in the report such as XRA, FLA etc.                          
+
+XRs = report.toseconds(activeregion, 'XRA', tr)                          # convert the time of the xray to seconds. XRA = X-ray, FLA = flare
 Fls = report.toseconds(activeregion, 'FLA', tr)            
-combine = report.combine([X2,X3])    
+combine = report.combine([X2,X3])                                        # combine xray and flare data in one list with time sequence.
 
 
+# overplot with the integrated timeseries above
 overplot_variables = [intL,mean,mstd]
 colour = ['c-','r-','b:']
 label = ['$\dot{\delta L}$', '$\mu(\dot{\delta L})$', '$\mu+3\sigma$']
