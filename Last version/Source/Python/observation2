@@ -336,6 +336,7 @@ class SDO:
 
 class NOAAreport:
     def __init__(self,start, end):
+        self.stime = (int(start[11:13])*3600) + ( int(start[14:16])*60)
         c=0
         daframe={'Event':[], 'Begin':[],'Max':[], 'End':[],
                  'Type':[],'Loc/Frq':[], 'Particulars':[], 'Reg':[]}
@@ -390,28 +391,30 @@ class NOAAreport:
         else:
             return self.df.iloc[index]
 
-                    
     def toseconds(self, activeregion, variable, time):
         time_secd = [((int(i[:-2])*3600)+(int(i[-2:])*60)) for i in self.Filter(activeregion, variable)[time]] 
         l=[]
         if ((variable == 'XRA') or (variable == 'FLA')):
             Xrayclass = [i for i in self.Filter(activeregion, variable)['Particulars']]
             for c in range(len(Xrayclass)):
-                if Xrayclass[c][0] == 'A':
-                    l.append([time_secd[c],'c--', Xrayclass[c]])
-                if Xrayclass[c][0] == 'B':
-                    l.append([time_secd[c],'y--', Xrayclass[c]])
-                if Xrayclass[c][0] == 'C':
-                    l.append([time_secd[c],'g--', Xrayclass[c]])
-                if Xrayclass[c][0] == 'M':
-                    l.append([time_secd[c],'b--', Xrayclass[c]])
-                if Xrayclass[c][0] == 'X':
-                    l.append([time_secd[c],'r--', Xrayclass[c]])
+                if (time_secd[c] >= self.stime):
+                    if Xrayclass[c][0] == 'A':
+                        l.append([time_secd[c],'c--', Xrayclass[c]])
+                    if Xrayclass[c][0] == 'B':
+                        l.append([time_secd[c],'y--', Xrayclass[c]])
+                    if Xrayclass[c][0] == 'C':
+                        l.append([time_secd[c],'g--', Xrayclass[c]])
+                    if Xrayclass[c][0] == 'M':
+                        l.append([time_secd[c],'b--', Xrayclass[c]])
+                    if Xrayclass[c][0] == 'X':
+                        l.append([time_secd[c],'r--', Xrayclass[c]])
         if variable == 'FLA':
             flare = [i for i in self.Filter(activeregion, variable)['Particulars']]
             for c in range(len(flare)):
-                l.append([time_secd[c],'k-', 'FL'])       
+                if (time_secd[c] >= self.stime):
+                    l.append([time_secd[c],'k-', 'FL'])       
         return l      
+   
 
     def combine(self,list_of_lists):
         List=[]
