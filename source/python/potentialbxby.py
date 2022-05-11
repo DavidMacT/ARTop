@@ -78,7 +78,7 @@ for i in range(startfl,endfl):
         
         a_file = (z1+Nx+s2+z3)
         np.savetxt(a_file, Bxpf[:])
-        print(a_file)
+#        print(a_file)
 
         a_file = (z1+Ny+s2+z3)
         np.savetxt(a_file, Bypf[:])        

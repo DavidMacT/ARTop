@@ -1,5 +1,6 @@
 #!/bin/bash
 
+exec 2>/dev/null
 
 script_path=`dirname "$0"`
 script_path=`eval "cd \"$script_path\" && pwd"`
@@ -23,24 +24,24 @@ cd
 inputdir=${array[11]}/Data/AR_${array[0]}/input_images
 outputdir=${array[11]}/Data/AR_${array[0]}/output
 
+
+# make input directory
+mkdir -p $inputdir
+
+# make output directory
+mkdir -p $outputdir
+
+> $outputdir/regionData.dat
+
 # specifications
 > $outputdir/specifications.txt
 echo ${array[10]} >> $outputdir/specifications.txt
 echo ${array[13]} >> $outputdir/specifications.txt
 echo ${array[14]} >> $outputdir/specifications.txt
 
-
-# make input files
-mkdir -p $inputdir
-
-# make output files
-mkdir -p $outputdir
-> $outputdir/regionData.dat
-
-
 # download the magnetogram data
 if [ "${array[1]}" == "true" ]; then
-python $script_path/source/python/MagDown.py ${array[0]} ${array[2]} ${array[3]} ${array[4]} ${array[5]} ${array[6]} ${array[7]} ${array[8]} ${array[9]} $inputdir $outputdir
+    python $script_path/source/python/MagDown.py ${array[0]} ${array[2]} ${array[3]} ${array[4]} ${array[5]} ${array[6]} ${array[7]} ${array[8]} ${array[9]} $inputdir $outputdir
 fi
 
 # get region pixel numbers
@@ -49,7 +50,7 @@ nx=$(tail -2 $outputdir/regionData.dat | head -1)
 echo 'x pixels= '$nx
 echo 'y pixels= '$ny
 
-#The number of downloaded files
+# the number of downloaded files
 endfl=$(ls $inputdir/ | grep "bx" | wc -l)
 echo "Number of dumps: ${endfl}"
 #endfl is the value of this last file
@@ -63,49 +64,45 @@ python $script_path/source/python/DAVE4vm.py ${array[0]} ${array[2]} ${array[3]}
 
 #remove the initial download files
 if [ "${array[15]}" == "true" ]; then
-rm -rf $inputdir
+    rm -rf $inputdir
 fi
 
-echo 'Calculating the Potential field..'
+echo 'Calculating the potential field..'
 # calculate the potential fields
 python $script_path/source/python/potentialbxby.py ${array[0]} 0 $endfl $nx $ny $outputdir
 
-##-----------------------------------------------------------------------------------------------------------
+##----------------------------------------------------------------------------
 
 if [ "${array[12]}" == "true" ]; then
-cd $main_dir
+    cd $main_dir
 
-echo '-------------------------------------- '
-echo 'Computing the winding set potential..'
+    # create file for the images
+    mkdir -p ${array[11]}/Data/AR_${array[0]}/generated_images
 
-g++ -c -O3 -std=gnu++14 -o $src/c++/pointCheap.o  $src/c++/pointCheap.cpp -fopenmp
+    echo '-------------------------------------- '
+    echo 'Calculating topological quantities..'
 
-g++ -c -O3 -std=gnu++14 -o $src/c++/interpolation2Large.o $src/c++/interpolation2Large.cpp -fopenmp
-g++ -c -O3 -std=gnu++14 -o $src/c++/biotSavartGauge.o $src/c++/biotSavartGauge.cpp -fopenmp
+    #cd $src/c++/
+    # compile the code
+    chmod u+x compTopCode
+    ./compTopCode
 
-g++ -c -O3 -std=gnu++14 -std=gnu++14 -o $src/c++/mainObservationalWindingPotentialFast.o $src/c++/mainObservationalWindingPotentialFast.cpp -fopenmp
+    # the start and end files
+    startfl=0
+    end=$(($endfl - 1))
 
-g++ -O3 -std=gnu++14 -o $src/c++/observationalWindingPotentialFast $src/c++/pointCheap.o $src/c++/interpolation2Large.o  $src/c++/biotSavartGauge.o $src/c++/mainObservationalWindingPotentialFast.o -fopenmp
+    # run the code, loop through all the files
+    for i in $(seq $startfl $end)
+    do
+	echo $i
+	
+	./observationalWindingPotentialFast $outputdir/Ux_${array[0]}_${array[10]}_$i.txt $outputdir/Uy_${array[0]}_${array[10]}_$i.txt $outputdir/Uz_${array[0]}_${array[10]}_$i.txt $outputdir/bx_${array[0]}_$i.txt $outputdir/by_${array[0]}_$i.txt $outputdir/bz_${array[0]}_$i.txt $nx $ny 360 360 ${array[13]} $outputdir/Bxp_${array[0]}_$i.txt $outputdir/Byp_${array[0]}_$i.txt $outputdir/windDatPotentialFastCO${array[13]}_VS${array[10]}_${array[14]}_$i.dat ${array[14]} >&2
+    done
 
-# create file for the images
-mkdir -p ${array[11]}/Data/AR_${array[0]}/generated_images
-
-cd $src/c++/
-
-#The start and end files
-startfl=0
-end=$(($endfl - 1))
-for i in $(seq $startfl $end)
-do
-echo $i
-#echo $outputdir/Ux_${array[0]}_${array[10]}_$i.txt
-./observationalWindingPotentialFast $outputdir/Ux_${array[0]}_${array[10]}_$i.txt $outputdir/Uy_${array[0]}_${array[10]}_$i.txt $outputdir/Uz_${array[0]}_${array[10]}_$i.txt $outputdir/bx_${array[0]}_$i.txt $outputdir/by_${array[0]}_$i.txt $outputdir/bz_${array[0]}_$i.txt $nx $ny 360 360 ${array[13]} $outputdir/Bxp_${array[0]}_$i.txt $outputdir/Byp_${array[0]}_$i.txt $outputdir/windDatPotentialFastCO${array[13]}_VS${array[10]}_${array[14]}_$i.dat ${array[14]}
-done
-
-#integrated variables
-for i in $(seq $startfl $end)
-do
-tail -10 $outputdir/windDatPotentialFastCO${array[13]}_VS${array[10]}_${array[14]}_$i.dat >> $outputdir/netWindDatPotFast${array[13]}_VS${array[10]}_${array[14]}.dat
-done
+    #integrated variables
+    for i in $(seq $startfl $end)
+    do
+	tail -10 $outputdir/windDatPotentialFastCO${array[13]}_VS${array[10]}_${array[14]}_$i.dat >> $outputdir/netWindDatPotFast${array[13]}_VS${array[10]}_${array[14]}.dat
+    done
 
 fi
