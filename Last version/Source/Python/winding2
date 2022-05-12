@@ -323,7 +323,7 @@ class timeseries:
         plt.xlabel('Time ('+ u[1] + ')')   
         plt.ylim([min(Y[0][:len(X)]), max(Y[0][:len(X)])])
         plt.xlim([(X[0]/u[0]), (X[-1]/u[0])])
-        plt.legend()
+        plt.legend(loc=0, bbox_to_anchor=(1, 0.5), fontsize = 'x-small')
         plt.show()
     
         if save is True:
