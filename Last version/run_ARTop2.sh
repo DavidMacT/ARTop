@@ -30,8 +30,6 @@ mkdir -p $inputdir
 # make output files
 mkdir -p $outputdir
 
-> $outputdir/regionData.dat
-
 # specifications
 > $outputdir/specifications.txt
 echo ${array[10]} >> $outputdir/specifications.txt
@@ -42,6 +40,8 @@ echo ${array[14]} >> $outputdir/specifications.txt
 
 # download the magnetogram data
 if [ "${array[1]}" == "true" ]; then
+> $outputdir/regionData.dat
+
 anaconda3-launch python $script_path/source/python/MagDown.py ${array[0]} ${array[2]} ${array[3]} ${array[4]} ${array[5]} ${array[6]} ${array[7]} ${array[8]} ${array[9]} $inputdir $outputdir
 fi
 
