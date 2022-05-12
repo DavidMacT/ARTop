@@ -132,7 +132,7 @@ fltr_events = report.Filter(activeregion, variable)                      # show 
 
 XRs = report.toseconds(activeregion, 'XRA', tr)                          # convert the time of the xray to seconds. XRA = X-ray, FLA = flare
 Fls = report.toseconds(activeregion, 'FLA', tr)            
-combine = report.combine([X2,X3])                                        # combine xray and flare data in one list with time sequence.
+combine = report.combine([XRs,Fls])                                        # combine xray and flare data in one list with time sequence.
 
 
 # overplot with the integrated timeseries above
