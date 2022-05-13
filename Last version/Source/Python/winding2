@@ -121,7 +121,7 @@ class mapping:
             nx = int(nx/Sampling) + 1
             ny = int(ny/Sampling) + 1
         else:
-            nx, ny = nx/Sampling , ny/Sampling
+            nx, ny = int(nx/Sampling) , int(ny/Sampling)
             
         variable = self.convert_array(nx,ny, sorted_variable[Variable])
         return variable       
