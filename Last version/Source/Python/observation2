@@ -175,7 +175,7 @@ class goes_xray:
         start = datetime.datetime(int(str(stime)[:4]),int(str(stime)[5:7]),int(str(stime)[8:10]))
         end = datetime.datetime(int(str(etime)[:4]),int(str(etime)[5:7]),int(str(etime)[8:10])) + timedelta(days=1)
         
-    
+   
         c = 1 if ((end-start).total_seconds()%86400)>0 else 0
         files_number = (end-start).total_seconds()//86400 + c
     
