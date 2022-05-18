@@ -817,7 +817,7 @@ if (int(file_length/3)>2):
             print('The file '+ str("bx_"+regionName+"_{:d}.txt".format(t))+' is not exist')
             continue
 
-    print('number of calculated files: ', 3*c)
+    print('number of created files: ', c)
 
 
     ## remove the data in the input file

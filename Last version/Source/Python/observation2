@@ -30,12 +30,12 @@ class goes_xray:
         self.SatelliteNumber = SatelliteNumber
 
         year, month, day= int(start_time[:4]),int(start_time[5:7]),int(start_time[8:10])
-        hour, minute = int(start_time[11:13]), int(start_time[14:16])
+        self.hour_s, self.minute_s = int(start_time[11:13]), int(start_time[14:16])
     
         year_e, month_e, day_e= int(end_time[:4]),int(end_time[5:7]),int(end_time[8:10])
         hour_e, minute_e = int(end_time[11:13]), int(end_time[14:16])
         
-        self.stime = datetime.datetime(int(year),int(month),int(day),int(hour), int(minute),0)
+        self.stime = datetime.datetime(int(year),int(month),int(day),int(self.hour_s), int(self.minute_s),0)
         self.etime = datetime.datetime(int(year_e),int(month_e),int(day_e),int(hour_e), int(minute_e),0)
         
     
@@ -175,7 +175,7 @@ class goes_xray:
         start = datetime.datetime(int(str(stime)[:4]),int(str(stime)[5:7]),int(str(stime)[8:10]))
         end = datetime.datetime(int(str(etime)[:4]),int(str(etime)[5:7]),int(str(etime)[8:10])) + timedelta(days=1)
         
-    
+   
         c = 1 if ((end-start).total_seconds()%86400)>0 else 0
         files_number = (end-start).total_seconds()//86400 + c
     
@@ -209,7 +209,8 @@ class goes_xray:
         
         return  self.picked_time, fluxA, fluxb 
     
-    
+    def get_relativetime(self,time):
+        return time - ((self.hour_s*3600)+ self.minute_s*60)   
     
     def xray_peaks(self, data, xray_class):
         
@@ -228,7 +229,7 @@ class goes_xray:
         peak_times =[self.picked_time[i] for i in peaks_indces]
         
         
-        return [[t,color, xray_class] for t in peak_times], peaks
+        return [[self.get_relativetime(t),color, xray_class] for t in peak_times], peaks
 
 
 class SDO:
@@ -373,9 +374,17 @@ class NOAAreport:
             start = datetime.date(int(start[:4]),int(start[5:7]),int(start[8:10]))+ datetime.timedelta(days=1)
             c+=24
         self.df = pd.DataFrame(daframe)
+    def unique(self,list_):
+        set_val=[]
+        for v in list_:
+            if v not in set_val:
+                if len(str(v)) !=0:
+                    set_val.append(v)
+        return set_val
+    
     def show(self, variable=None):
         if variable is not None:
-            return list(self.df[variable])
+            return self.unique(self.df[variable])
         else:
             return self.df
     def Filter(self,activeregion, variable):
@@ -390,35 +399,45 @@ class NOAAreport:
         else:
             return self.df.iloc[index]
 
+    def get_relativetime(self,time):
+        return time - self.stime
+
     def toseconds(self, activeregion, variable, time):
-        time_secd = [((int(i[:-2])*3600)+(int(i[-2:])*60)) for i in self.Filter(activeregion, variable)[time]] 
-        l=[]
-        if ((variable == 'XRA') or (variable == 'FLA')):
-            Xrayclass = [i for i in self.Filter(activeregion, variable)['Particulars']]
-            for c in range(len(Xrayclass)):
-                if (time_secd[c] >= self.stime):
-                    if Xrayclass[c][0] == 'A':
-                        l.append([time_secd[c],'c--', Xrayclass[c]])
-                    if Xrayclass[c][0] == 'B':
-                        l.append([time_secd[c],'y--', Xrayclass[c]])
-                    if Xrayclass[c][0] == 'C':
-                        l.append([time_secd[c],'g--', Xrayclass[c]])
-                    if Xrayclass[c][0] == 'M':
-                        l.append([time_secd[c],'b--', Xrayclass[c]])
-                    if Xrayclass[c][0] == 'X':
-                        l.append([time_secd[c],'r--', Xrayclass[c]])
-        if variable == 'FLA':
-            flare = [i for i in self.Filter(activeregion, variable)['Particulars']]
-            for c in range(len(flare)):
-                if (time_secd[c] >= self.stime):
-                    l.append([time_secd[c],'k-', 'FL'])       
-        return l      
+        if str(activeregion)[-4:] in self.show('Reg'):
+            time_secd = [((int(i[:-2])*3600)+(int(i[-2:])*60)) for i in self.Filter(activeregion, variable)[time]] 
+            l=[]
+            if ((variable == 'XRA') or (variable == 'FLA')):
+                Xrayclass = [i for i in self.Filter(activeregion, variable)['Particulars']]
+                for c in range(len(Xrayclass)):
+                    if (time_secd[c] >= self.stime):
+                        if Xrayclass[c][0] == 'A':
+                            l.append([self.get_relativetime(time_secd[c]),'c--', Xrayclass[c]])
+                        if Xrayclass[c][0] == 'B':
+                            l.append([self.get_relativetime(time_secd[c]),'y--', Xrayclass[c]])
+                        if Xrayclass[c][0] == 'C':
+                            l.append([self.get_relativetime(time_secd[c]),'g--', Xrayclass[c]])
+                        if Xrayclass[c][0] == 'M':
+                            l.append([self.get_relativetime(time_secd[c]),'b--', Xrayclass[c]])
+                        if Xrayclass[c][0] == 'X':
+                            l.append([self.get_relativetime(time_secd[c]),'r--', Xrayclass[c]])
+            if variable == 'FLA':
+                flare = [i for i in self.Filter(activeregion, variable)['Particulars']]
+                for c in range(len(flare)):
+                    if (time_secd[c] >= self.stime):
+                        l.append([self.get_relativetime(time_secd[c]),'k-', 'FL'])
+            return l      
+        else:
+            print('The region number '+str(activeregion)[-4:]+' is not found. Try another day.')
+
    
 
     def combine(self,list_of_lists):
         List=[]
         for l in list_of_lists:
-           List += l
+            if l is not None:
+                List += l
+            else:
+                sys.exit('There is no data for None')
         l=[]
         for v in List:
             l.append(v[0])
@@ -429,5 +448,3 @@ class NOAAreport:
                 if s == List[t][0]:
                     sorted_list.append(List[t])
         return sorted_list
- 
-

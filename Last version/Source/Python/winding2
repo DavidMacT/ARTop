@@ -7,6 +7,7 @@ Created on Wed May  4 10:52:10 2022
 import matplotlib.pyplot as plt 
 import numpy as np
 import os
+import datetime
 import sys
 
 
@@ -22,7 +23,7 @@ class mapping:
         r=[]
         for line in file:
             r.append(line.split()[0])
-        V_smooth, cutoff, Sampling = r[-3], r[-2], r[-1]
+        V_smooth, cutoff, Sampling = r[0], r[1], r[2]
         r=[]
         return  V_smooth, cutoff, int(Sampling)   
         
@@ -121,7 +122,7 @@ class mapping:
             nx = int(nx/Sampling) + 1
             ny = int(ny/Sampling) + 1
         else:
-            nx, ny = nx/Sampling , ny/Sampling
+            nx, ny = int(nx/Sampling) , int(ny/Sampling)
             
         variable = self.convert_array(nx,ny, sorted_variable[Variable])
         return variable       
@@ -196,13 +197,37 @@ class timeseries:
         r=[]
         for line in file:
             r.append(line.split()[0])
-        V_smooth, cutoff, Sampling = r[-3], r[-2], r[-1]
+        V_smooth, cutoff, Sampling = r[0], r[1], r[2]
+        self.st, self.et = r[4], r[6]
         r=[]
         return V_smooth, cutoff, Sampling
+
+    def timing_createdfiles(self,V_smooth, cutoff, Sampling):                 # get the time of the created files for integration
+        numbering=self.path+'/output/numbering'+str(cutoff)+'_VS'+str(V_smooth)+'_'+str(Sampling)+'.dat'
+        files=os.listdir(self.path+'/output')
+        intg_data = open(self.path+'/output/netWindDatPotFast'+str(cutoff)+'_VS'+str(V_smooth)+'_'+str(Sampling)+'.dat', 'w')
+        
+        for f in range(len(np.loadtxt(numbering))+1):
+            file='windDatPotentialFastCO'+cutoff+'_VS'+V_smooth+'_'+Sampling+'_'+str(f)+'.dat'
+            if (file in files):
+                values=[]
+                file=open(self.path+'/output/'+file)
+                for line in file:
+                    r=line.split()
+                    if (len(r) == 1):
+                        intg_data.write(r[0]+'\n')
+            else:
+                for line in range(10):
+                    intg_data.write(str(0) +'\n')
+    
+        intg_data.close()
+    #    return intg_data
 
                 
     def read_data(self, variable):
         V_smooth, cutoff, Sampling = self.get_specifications()
+        create_integrated_data = self.timing_createdfiles(V_smooth, cutoff, Sampling)
+
         self.Name_file = 'netWindDatPotFast'+str(cutoff)+'_VS'+str(V_smooth)+'_'+str(Sampling)+'.dat'
         self.path = self.path_ +'/AR_'+str(self.regionName)
 
@@ -240,7 +265,12 @@ class timeseries:
         return np.array(upscale_missing_values[variable])
 
 
-    def integrate_accum(self, Vrbs, dt):
+    def integrate_accum(self, strtime, endtime, Vrbs, dt):
+        stime= datetime.datetime(int(self.st[:4]),int(self.st[4:6]),int(self.st[6:8]),int(self.st[9:]))
+        etime= datetime.datetime(int(self.et[:4]),int(self.et[4:6]),int(self.et[6:8]),int(self.et[9:]))
+
+        tlength = (etime - stime).total_seconds()
+        print('tlength = ', (tlength*5/3600))
         # accumulation trapzoid
         integrated=[]
         st_time = 0
@@ -251,10 +281,11 @@ class timeseries:
             y_right = data[1:i]                          # right endpoints
             y_left = data[:i-1]                          # left endpoints
             integrated.append( (dt/2) * np.sum(y_right + y_left) )   
+        t_range = np.linspace(st_time,tlength,int(tlength*5/3600))     # N+1 points make N subintervals
         
-        time = np.linspace(st_time,(len(data))*dt,len(integrated))     # N+1 points make N subintervals
+     #   t_range = np.linspace(st_time,(len(data)*dt),len(integrated))     # N+1 points make N subintervals
 
-        return np.array(integrated), time   
+        return np.array(integrated), t_range   
 
     def mean_std(self,Z, n_points, factor = 3):
         mean = []
@@ -293,8 +324,10 @@ class timeseries:
         return df
         
     def plot(self,X,Y,colour,label, ylabel,Name,unit, oplot = None, save=False, **kwargs):   
-    
+        
+
         plt.rcParams.update({'font.size':16})
+
         plt.figure(figsize=(12, 10))
         plt.title( Name, loc='center', fontsize = 16)
         
@@ -323,12 +356,13 @@ class timeseries:
         plt.xlabel('Time ('+ u[1] + ')')   
         plt.ylim([min(Y[0][:len(X)]), max(Y[0][:len(X)])])
         plt.xlim([(X[0]/u[0]), (X[-1]/u[0])])
-        plt.legend()
+#        plt.legend()
+        plt.legend(loc=0, bbox_to_anchor=(1, 0.5), fontsize = 'x-small')
+
         plt.show()
     
         if save is True:
             imagename = self.Name_file[len(self.Name_file)-20:len(self.Name_file)-4]+'.jpg'
             plt.savefig(self.path + '/generated_images/'+ imagename)
 
-        
-
+       

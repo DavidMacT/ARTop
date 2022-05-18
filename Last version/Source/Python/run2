@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Wed May  8 11:01:12 2022
+Created on Wed May  4 11:01:12 2022
 @author: khaled Darwish
 """
 import winding2 as win
-import observation2
-from observation2 import NOAAreport as noaa
+import observation3
+from observation3 import NOAAreport as noaa
 
 '''
 ^^^^^^^^^^
 * Inputs *
 ^^^^^^^^^^
 '''
-activeRegion = 7115
+activeRegion = 956
 filenumber = 100
 dt = 720
 
@@ -32,23 +32,25 @@ Map.plotmap(bz,title=r'$B_z$')
 ## Creat gif file
 ##---------------
 
-im_st_No = 100
-im_ed_No = 103
+im_st_No = 90
+im_ed_No = 104
 variable_name = 'bz'  
 
-X=Map.plot_gif(im_st_No, im_ed_No, variable_name, title = 'bz')
+#X=Map.plot_gif(im_st_No, im_ed_No, variable_name, title = 'bz')
 '''
 <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 Create time series
 <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 '''
+start_time = '2011-10-11 20:00:00'
+end_time = '2011-10-12 20:00:00'
 
 TS = win.timeseries(activeRegion, path_)
 
 L = TS.read_data( 'totWind_Cur_Pot_Vel')
 deltaL = TS.read_data('deltaLflux')
 
-intL, time = TS.integrate_accum('totWind_Cur_Pot_Vel',dt)
+intL, time = TS.integrate_accum(start_time, end_time,'totWind_Cur_Pot_Vel',dt)
 
 
 # scale factors
@@ -77,15 +79,15 @@ Plot X-ray flux
 '''
 
 # path1 = '/home/khd2/'                                         # insert the path if you want to download Goes files.
-start_time = '2017-08-28 09:00:00'
-end_time = '2017-09-04 19:00:00'
+start_time = '2011-10-13 20:00:00'
+end_time = '2011-10-14 20:00:00'
 
 
 X=observation3.goes_xray(start_time, end_time,SatelliteNumber = 15)     # select the time limits and goes satellite number
 
 picked_time, fluxA, fluxb = X.get_data()                        #  get the data
 
-X.plot_xray(picked_time, fluxA, fluxb)                          # plot_xray( time , fluxA , fluxb )  
+#X.plot_xray(picked_time, fluxA, fluxb)                          # plot_xray( time , fluxA , fluxb )  
  
 pt, pv = X.xray_peaks(fluxb,'C')                                # xray_peaks(  wavelength  , x-ray class  ) 
 
@@ -103,12 +105,12 @@ Plot SDO map
 '''
 
 location = 'S08E23'
-start = '2017-09-02 00:00:00'
-end = '2017-09-02 00:05:00'
+start_time = '2011-10-13 20:00:00'
+end_time = '2011-10-13 20:05:00'
 
-Ob = observation3.SDO(start, end, location)
-Ob.get_map(graphs=['1600', '171','hmi'])
-Ob.plot()
+#Ob = observation3.SDO(start_time, end_time, location)
+#Ob.get_map(graphs=['1600', '171','hmi'])
+#Ob.plot()
 required_levels = [20, 100, 140, 300, 500]
 #Ob.plot(field_strength_spots = '1600', level=required_levels)
 
@@ -117,25 +119,22 @@ required_levels = [20, 100, 140, 300, 500]
 Plot NOAA 
 <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 '''
-start = '2017-08-28 00:00:00'
-end = '2017-09-04 00:05:00'
+start_time = '2011-10-13 20:00:00'
+end_time = '2011-10-14 20:00:00'
 
+variable = 'FLA'
+activeregion = 'AR11316'
+tr = 'Begin'
 
-report = noaa(start,end)
-showAll = report.show()                                                      
+report = noaa(start_time,end_time)
+showAll = report.show()
 
-variable = 'XRA'                                                             
-activeregion = 'AR12672'                                                 # choose the desired active region number.
-tr = 'Begin'                                                             # choose the interested time of the event: Begin, Max, End
-
-fltr_events = report.Filter(activeregion, variable)                      # show a list for the selected type/variable in the report such as XRA, FLA etc.                          
-
-XRs = report.toseconds(activeregion, 'XRA', tr)                          # convert the time of the xray to seconds. XRA = X-ray, FLA = flare
+fltr_events = report.Filter(activeregion, variable)
+XRs = report.toseconds(activeregion, 'XRA', tr)  
 Fls = report.toseconds(activeregion, 'FLA', tr)            
-combine = report.combine([X2,X3])                                        # combine xray and flare data in one list with time sequence.
+combine = report.combine([XRs,Fls])    
 
 
-# overplot with the integrated timeseries above
 overplot_variables = [intL,mean,mstd]
 colour = ['c-','r-','b:']
 label = ['$\dot{\delta L}$', '$\mu(\dot{\delta L})$', '$\mu+3\sigma$']
@@ -143,4 +142,3 @@ label = ['$\dot{\delta L}$', '$\mu(\dot{\delta L})$', '$\mu+3\sigma$']
 y_label = r'$winding$'+' '+ '$(km^4)$'
 title = 'test'
 TS.plot(time, overplot_variables, colour,label,y_label, title ,unit='h',oplot=combine)
-

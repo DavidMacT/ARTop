@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # coding: utf-8
-
+"""
+Adjusted on Fri May 13 14:30:49 2022
+@author: Khaled Darwish
+"""
 # In[5]:
 
 
@@ -24,9 +27,6 @@ client = drms.Client()
 
 
 # In[6]:
-
-
-
 
 c = drms.Client(email='brenorfs@gmail.com', verbose=True)
 
@@ -111,13 +111,6 @@ while(start_time <end_time):
                     datfl.close()
                     writeInitialData=False
 
-                # a_file = (inputdir+"/AR_"+regionNumber+"/bx_"+regionNumber+"_{:d}.txt".format(5*i+j))
-                # np.savetxt(a_file, bx[:,:])
-                # a_file = (inputdir+"/AR_"+regionNumber+"/by_"+regionNumber+"_{:d}.txt".format(5*i+j))
-                # np.savetxt(a_file, by[:,:])
-                # a_file = (inputdir+"/AR_"+regionNumber+"/bz_"+regionNumber+"_{:d}.txt".format(5*i+j))
-                # np.savetxt(a_file, bz[:,:])
-
                 a_file = (inputdir+"/bx_"+regionNumber+"_{:d}.txt".format(5*i+j))
                 np.savetxt(a_file, bx[:,:])
                 a_file = (inputdir+"/by_"+regionNumber+"_{:d}.txt".format(5*i+j))
@@ -149,3 +142,33 @@ while(start_time <end_time):
     print('Hour mark: ',start_time)        
 
 
+# numbering the full downloaded files
+#====================================
+
+strtime = sys.argv[12]
+endtime = sys.argv[13]
+regionName = sys.argv[14]
+Vsample, cutoff, sample = int(sys.argv[15]), int(sys.argv[16]), int(sys.argv[17])
+input_dir = sys.argv[10]
+output_dir =  sys.argv[11]
+
+def numbering(strtime, endtime, regionName,Vsample, cutoff, sample,input_dir, output_dir):
+    stime= datetime.datetime(int(str(strtime)[:4]),int(str(strtime)[4:6]),int(str(strtime)[6:8]),int(str(strtime)[8:]))
+    etime= datetime.datetime(int(str(endtime)[:4]),int(str(endtime)[4:6]),int(str(endtime)[6:8]),int(str(endtime)[8:]))
+    t_range = ((etime - stime).total_seconds()/3600)*5
+    
+    files=os.listdir(input_dir)
+    numbering_files=[]
+    for f in range(int(t_range)):
+        bx = 'bx_'+str(regionName)+'_'+str(f)+'.txt'
+        by = 'by_'+str(regionName)+'_'+str(f)+'.txt'
+        bz = 'bz_'+str(regionName)+'_'+str(f)+'.txt'
+        if ((bx in files) and (by in files) and (bz in files)):
+            numbering_files.append(f)
+     
+        else:
+            numbering_files.append(0)
+        filename = output_dir+'/numbering'+str(cutoff)+'_VS'+str(Vsample)+'_'+str(sample)+'.dat'
+        np.savetxt(filename, numbering_files)
+
+numbering(strtime, endtime, regionName,Vsample, cutoff, sample,input_dir, output_dir)

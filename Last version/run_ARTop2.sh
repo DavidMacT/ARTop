@@ -30,19 +30,26 @@ mkdir -p $inputdir
 # make output files
 mkdir -p $outputdir
 
-> $outputdir/regionData.dat
-
 # specifications
 > $outputdir/specifications.txt
 echo ${array[10]} >> $outputdir/specifications.txt
 echo ${array[13]} >> $outputdir/specifications.txt
 echo ${array[14]} >> $outputdir/specifications.txt
+echo 'start time' >> $outputdir/specifications.txt
+echo ${array[2]}${array[3]}${array[4]}'T'${array[5]} >> $outputdir/specifications.txt
+echo 'end time' >> $outputdir/specifications.txt
+echo ${array[6]}${array[7]}${array[8]}'T'${array[9]} >> $outputdir/specifications.txt
 
 
 
 # download the magnetogram data
 if [ "${array[1]}" == "true" ]; then
-anaconda3-launch python $script_path/source/python/MagDown.py ${array[0]} ${array[2]} ${array[3]} ${array[4]} ${array[5]} ${array[6]} ${array[7]} ${array[8]} ${array[9]} $inputdir $outputdir
+
+> $outputdir/regionData.dat
+stime=${array[2]}${array[3]}${array[4]}${array[5]}
+etime=${array[6]}${array[7]}${array[8]}${array[9]}
+
+anaconda3-launch python $script_path/source/python/MagDown.py ${array[0]} ${array[2]} ${array[3]} ${array[4]} ${array[5]} ${array[6]} ${array[7]} ${array[8]} ${array[9]} $inputdir $outputdir ${stime} ${etime} ${array[0]} ${array[10]} ${array[13]} ${array[14]}
 fi
 
 # get region pixel numbers
@@ -73,7 +80,6 @@ echo 'Calculating the Potential field..'
 anaconda3-launch python $script_path/source/python/potentialbxby.py ${array[0]} 0 $endfl $nx $ny $outputdir
 
 ##-----------------------------------------------------------------------------------------------------------
-
 if [ "${array[12]}" == "true" ]; then
 cd $main_dir
 
@@ -103,11 +109,4 @@ echo $i
 #echo $outputdir/Ux_${array[0]}_${array[10]}_$i.txt
 ./observationalWindingPotentialFast $outputdir/Ux_${array[0]}_${array[10]}_$i.txt $outputdir/Uy_${array[0]}_${array[10]}_$i.txt $outputdir/Uz_${array[0]}_${array[10]}_$i.txt $outputdir/bx_${array[0]}_$i.txt $outputdir/by_${array[0]}_$i.txt $outputdir/bz_${array[0]}_$i.txt $nx $ny 360 360 ${array[13]} $outputdir/Bxp_${array[0]}_$i.txt $outputdir/Byp_${array[0]}_$i.txt $outputdir/windDatPotentialFastCO${array[13]}_VS${array[10]}_${array[14]}_$i.dat ${array[14]}
 done
-
-#integrated variables
-for i in $(seq $startfl $end)
-do
-tail -10 $outputdir/windDatPotentialFastCO${array[13]}_VS${array[10]}_${array[14]}_$i.dat >> $outputdir/netWindDatPotFast${array[13]}_VS${array[10]}_${array[14]}.dat
-done
-
 fi
