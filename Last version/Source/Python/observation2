@@ -374,9 +374,17 @@ class NOAAreport:
             start = datetime.date(int(start[:4]),int(start[5:7]),int(start[8:10]))+ datetime.timedelta(days=1)
             c+=24
         self.df = pd.DataFrame(daframe)
+    def unique(self,list_):
+        set_val=[]
+        for v in list_:
+            if v not in set_val:
+                if len(str(v)) !=0:
+                    set_val.append(v)
+        return set_val
+    
     def show(self, variable=None):
         if variable is not None:
-            return set(self.df[variable])
+            return self.unique(self.df[variable])
         else:
             return self.df
     def Filter(self,activeregion, variable):
