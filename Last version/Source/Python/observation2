@@ -376,7 +376,7 @@ class NOAAreport:
         self.df = pd.DataFrame(daframe)
     def show(self, variable=None):
         if variable is not None:
-            return list(self.df[variable])
+            return set(self.df[variable])
         else:
             return self.df
     def Filter(self,activeregion, variable):
