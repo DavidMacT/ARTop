@@ -19,29 +19,28 @@ while IFS="=""," read -r A B; do
 # reading from file path
 done < "$file"
 
-
 cd
-inputdir=${array[11]}/Data/AR_${array[0]}/input_images
-outputdir=${array[11]}/Data/AR_${array[0]}/output
-
-
-# make input directory
-mkdir -p $inputdir
-
-# make output directory
-mkdir -p $outputdir
-
-> $outputdir/regionData.dat
+inputdir=${array[11]}
+outputdir=${array[12]}
 
 # specifications
 > $outputdir/specifications.txt
 echo ${array[10]} >> $outputdir/specifications.txt
-echo ${array[13]} >> $outputdir/specifications.txt
 echo ${array[14]} >> $outputdir/specifications.txt
+echo ${array[15]} >> $outputdir/specifications.txt
+echo 'start time' >> $outputdir/specifications.txt
+echo ${array[2]}${array[3]}${array[4]}'T'${array[5]} >> $outputdir/specifications.txt
+echo 'end time' >> $outputdir/specifications.txt
+echo ${array[6]}${array[7]}${array[8]}'T'${array[9]} >> $outputdir/specifications.txt
+
 
 # download the magnetogram data
 if [ "${array[1]}" == "true" ]; then
-    python $script_path/source/python/MagDown.py ${array[0]} ${array[2]} ${array[3]} ${array[4]} ${array[5]} ${array[6]} ${array[7]} ${array[8]} ${array[9]} $inputdir $outputdir
+    > $outputdir/regionData.dat
+    stime = ${array[2]}${array[3]}${array[4]}${array[5]}
+    etime = ${array[6]}${array[7]}${array[8]}${array[9]}
+    
+    python $script_path/source/python/MagDown.py ${array[0]} ${array[2]} ${array[3]} ${array[4]} ${array[5]} ${array[6]} ${array[7]} ${array[8]} ${array[9]} $inputdir $outputdir ${stime} ${etime} ${array[10]} ${array[14]} ${array[15]}
 fi
 
 # get region pixel numbers
@@ -63,7 +62,7 @@ python $script_path/source/python/DAVE4vm.py ${array[0]} ${array[2]} ${array[3]}
 
 
 #remove the initial download files
-if [ "${array[15]}" == "true" ]; then
+if [ "${array[16]}" == "true" ]; then
     rm -rf $inputdir
 fi
 
@@ -73,16 +72,16 @@ python $script_path/source/python/potentialbxby.py ${array[0]} 0 $endfl $nx $ny 
 
 ##----------------------------------------------------------------------------
 
-if [ "${array[12]}" == "true" ]; then
+if [ "${array[13]}" == "true" ]; then
     cd $main_dir
 
     # create file for the images
-    mkdir -p ${array[11]}/Data/AR_${array[0]}/generated_images
+    mkdir -p ${array[12]}/generated_images
 
     echo '-------------------------------------- '
     echo 'Calculating topological quantities..'
 
-    #cd $src/c++/
+    cd $src/c++/
     # compile the code
     chmod u+x compTopCode
     ./compTopCode
@@ -96,13 +95,13 @@ if [ "${array[12]}" == "true" ]; then
     do
 	echo $i
 	
-	./observationalWindingPotentialFast $outputdir/Ux_${array[0]}_${array[10]}_$i.txt $outputdir/Uy_${array[0]}_${array[10]}_$i.txt $outputdir/Uz_${array[0]}_${array[10]}_$i.txt $outputdir/bx_${array[0]}_$i.txt $outputdir/by_${array[0]}_$i.txt $outputdir/bz_${array[0]}_$i.txt $nx $ny 360 360 ${array[13]} $outputdir/Bxp_${array[0]}_$i.txt $outputdir/Byp_${array[0]}_$i.txt $outputdir/windDatPotentialFastCO${array[13]}_VS${array[10]}_${array[14]}_$i.dat ${array[14]} >&2
+	./ARTop $outputdir/Ux_${array[0]}_${array[10]}_$i.txt $outputdir/Uy_${array[0]}_${array[10]}_$i.txt $outputdir/Uz_${array[0]}_${array[10]}_$i.txt $outputdir/bx_${array[0]}_$i.txt $outputdir/by_${array[0]}_$i.txt $outputdir/bz_${array[0]}_$i.txt $nx $ny 360 360 ${array[14]} $outputdir/Bxp_${array[0]}_$i.txt $outputdir/Byp_${array[0]}_$i.txt $outputdir/windDatPotentialFastCO${array[14]}_VS${array[10]}_${array[15]}_$i.dat ${array[15]} >&2
     done
 
     #integrated variables
     for i in $(seq $startfl $end)
     do
-	tail -10 $outputdir/windDatPotentialFastCO${array[13]}_VS${array[10]}_${array[14]}_$i.dat >> $outputdir/netWindDatPotFast${array[13]}_VS${array[10]}_${array[14]}.dat
+	tail -10 $outputdir/windDatPotentialFastCO${array[14]}_VS${array[10]}_${array[15]}_$i.dat >> $outputdir/netWindDatPotFast${array[14]}_VS${array[10]}_${array[15]}.dat
     done
 
 fi
