@@ -5,7 +5,7 @@ import numpy as np
 # This script allows the user to plot maps of the variables outputted by the ARTop code
 
 # input details
-regionName='956'
+regionName='4536'
 filenumber = 10
 cutoff = 50
 v_smoothing = 20    

@@ -32,15 +32,13 @@ echo 'start time' >> $outputdir/specifications.txt
 echo ${array[2]}${array[3]}${array[4]}'T'${array[5]} >> $outputdir/specifications.txt
 echo 'end time' >> $outputdir/specifications.txt
 echo ${array[6]}${array[7]}${array[8]}'T'${array[9]} >> $outputdir/specifications.txt
-
+python $script_path/source/python/numbering.py ${array[2]}  ${array[3]}  ${array[4]}  ${array[5]}  ${array[6]}  ${array[7]}  ${array[8]}  ${array[9]} $outputdir
 
 # download the magnetogram data
 if [ "${array[1]}" == "true" ]; then
     > $outputdir/regionData.dat
-    stime = ${array[2]}${array[3]}${array[4]}${array[5]}
-    etime = ${array[6]}${array[7]}${array[8]}${array[9]}
     
-    python $script_path/source/python/MagDown.py ${array[0]} ${array[2]} ${array[3]} ${array[4]} ${array[5]} ${array[6]} ${array[7]} ${array[8]} ${array[9]} $inputdir $outputdir ${stime} ${etime} ${array[10]} ${array[14]} ${array[15]}
+    python $script_path/source/python/MagDown.py ${array[0]} ${array[2]} ${array[3]} ${array[4]} ${array[5]} ${array[6]} ${array[7]} ${array[8]} ${array[9]} $inputdir $outputdir
 fi
 
 # get region pixel numbers
@@ -49,9 +47,9 @@ nx=$(tail -2 $outputdir/regionData.dat | head -1)
 echo 'x pixels= '$nx
 echo 'y pixels= '$ny
 
-# the number of downloaded files
-endfl=$(ls $inputdir/ | grep "bx" | wc -l)
-echo "Number of dumps: ${endfl}"
+# the number of time steps for main loop
+endfl=$(tail -1 $outputdir/specifications.txt | head -1)
+echo "Number of time  dumps: ${endfl}"
 #endfl is the value of this last file
 
 

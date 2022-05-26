@@ -75,7 +75,7 @@ start_time = datetime.datetime(int(st_y),int(M),int(d),int(H),int(00),int(00))
 end_time = datetime.datetime(int(sys.argv[6]),int(sys.argv[7]),int(sys.argv[8]),int(sys.argv[9]),int(00),int(00))
 
 
-print('Time span = ', end_time - start_time)
+#print('Time span = ', end_time - start_time)
 
 print("downloading.."+'\n')
 
@@ -145,36 +145,3 @@ while(start_time <end_time):
     start_time = datetime.datetime(int(st_y),M,d,H,int(00),int(00))
     print('Hour mark: ',start_time)
     
-
-    
-# numbering the full downloaded files
-#====================================
-
-strtime = sys.argv[12]
-endtime = sys.argv[13]
-regionName = sys.argv[1]
-Vsample, cutoff, sample = int(sys.argv[14]), int(sys.argv[15]), int(sys.argv[16])
-ptint(Vsample,cutoff,sample)
-input_dir = sys.argv[10]
-output_dir =  sys.argv[11]
-p
-
-def numbering(strtime, endtime, regionName,Vsample, cutoff, sample,input_dir, output_dir):
-    stime= datetime.datetime(int(str(strtime)[:4]),int(str(strtime)[4:6]),int(str(strtime)[6:8]),int(str(strtime)[8:]))
-    etime= datetime.datetime(int(str(endtime)[:4]),int(str(endtime)[4:6]),int(str(endtime)[6:8]),int(str(endtime)[8:]))
-    t_range = ((etime - stime).total_seconds()/3600)*5
-    print(int(t_range))
-    files=os.listdir(input_dir)
-    numbering_files=[]
-    for f in range(int(t_range)):
-        bx = 'bx_'+str(regionName)+'_'+str(f)+'.txt'
-        by = 'by_'+str(regionName)+'_'+str(f)+'.txt'
-        bz = 'bz_'+str(regionName)+'_'+str(f)+'.txt'
-        if ((bx in files) and (by in files) and (bz in files)):
-            numbering_files.append(f)
-        else:
-            numbering_files.append(0)
-    filename = output_dir+'/numbering'+str(cutoff)+'_VS'+str(Vsample)+'_'+str(sample)+'.dat'
-    np.savetxt(filename, numbering_files)
-
-numbering(strtime, endtime, regionName,Vsample, cutoff, sample,input_dir, output_dir)
