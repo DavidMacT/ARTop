@@ -1,6 +1,0 @@
-#!/bin/bash
-g++ -c -O3 -std=gnu++14 -o source/c++/pointCheap.o  source/c++/pointCheap.cpp -fopenmp
-g++ -c -O3 -std=gnu++14 -o source/c++/interpolation2Large.o source/c++/interpolation2Large.cpp -fopenmp
-g++ -c -O3 -std=gnu++14 -o source/c++/biotSavartGauge.o source/c++/biotSavartGauge.cpp -fopenmp
-g++ -c -O3 -std=gnu++14 -std=gnu++14 -o source/c++/mainObservationalWindingPotentialFast.o source/c++/mainObservationalWindingPotentialFast.cpp -fopenmp
-g++ -O3 -std=gnu++14 -o observationalWindingPotentialFast source/c++/pointCheap.o source/c++/interpolation2Large.o  source/c++/biotSavartGauge.o source/c++/mainObservationalWindingPotentialFast.o -fopenmp
