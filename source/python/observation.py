@@ -1,14 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Mon Apr 18 13:01:04 2022
-@author: khd2
-"""
 
 import matplotlib.pyplot as plt
 from datetime import timedelta
-from datetime import datetime
-
+import datetime
+import pandas as pd
 import numpy as np
 import netCDF4 as nc
 import os
@@ -25,18 +21,19 @@ import warnings
 warnings.filterwarnings("ignore")
 
 
+
 class goes_xray:
     def __init__(self, start_time, end_time, SatelliteNumber):
         self.SatelliteNumber = SatelliteNumber
 
         year, month, day= int(start_time[:4]),int(start_time[5:7]),int(start_time[8:10])
-        hour, minute = int(start_time[11:13]), int(start_time[14:16])
+        self.hour_s, self.minute_s = int(start_time[11:13]), int(start_time[14:16])
     
         year_e, month_e, day_e= int(end_time[:4]),int(end_time[5:7]),int(end_time[8:10])
         hour_e, minute_e = int(end_time[11:13]), int(end_time[14:16])
         
-        self.stime = datetime(int(year),int(month),int(day),int(hour), int(minute),0)
-        self.etime = datetime(int(year_e),int(month_e),int(day_e),int(hour_e), int(minute_e),0)
+        self.stime = datetime.datetime(int(year),int(month),int(day),int(self.hour_s), int(self.minute_s),0)
+        self.etime = datetime.datetime(int(year_e),int(month_e),int(day_e),int(hour_e), int(minute_e),0)
         
     
     def get_file(self,date_time_):
@@ -60,7 +57,7 @@ class goes_xray:
     def pick_xray_time(self,Z_seconds, timeseries1, timeseries2):
         stime = self.stime
         etime = self.etime
-        startday = datetime(int(str(stime)[:4]),int(str(stime)[5:7]),int(str(stime)[8:10]),0,0,0)
+        startday = datetime.datetime(int(str(stime)[:4]),int(str(stime)[5:7]),int(str(stime)[8:10]),0,0,0)
         
         picked_values1=[]
         picked_values2=[]
@@ -88,6 +85,14 @@ class goes_xray:
     
         return picked_time, picked_values1, picked_values2
     
+    def clear(self,data):
+        cl_data=[]
+        for i in data:
+            if (i<=0):
+                cl_data.append(None)
+            else:
+                cl_data.append(i)
+        return cl_data    
     
     def time_label(self):
         stime = self.stime
@@ -123,13 +128,15 @@ class goes_xray:
         etime = self.etime    
         level = {'A':1e-8,'B':1e-7,'C':1e-6, 'M':1e-5,'X':1e-4}
     
-        plt.rcParams['font.size'] = '14'
+        plt.rcParams['font.size'] = '20'
         fig, ax = plt.subplots(figsize=(8,6))
         
         if data1 is not None:
-            ax.plot(time,data1 ,'b', label='0.5 - 4.0'+r'$\ {\AA}$')
+            ax.plot(time,self.clear(data1) ,'b', label='0.5 - 4.0'+r'$\ {\AA}$')
         if data2 is not None:
-            ax.plot(time, data2,'r', label='1.0 - 8.0'+r'$\ {\AA}$')        
+            ax.plot(time, self.clear(data2),'r', label='1.0 - 8.0'+r'$\ {\AA}$')        
+            
+        ax.plot(((12120),(12120)), (min(data2+data1),max(data2+data1)+100),'k--')              ## new
         ax.set_yscale("log")
         ax.grid(axis='y')
         ax.set_ylabel('Watts m'+r'$^{-2}$')
@@ -162,8 +169,8 @@ class goes_xray:
     
         iter_time = stime
     
-        start = datetime(int(str(stime)[:4]),int(str(stime)[5:7]),int(str(stime)[8:10]))
-        end = datetime(int(str(etime)[:4]),int(str(etime)[5:7]),int(str(etime)[8:10])) + timedelta(days=1)
+        start = datetime.datetime(int(str(stime)[:4]),int(str(stime)[5:7]),int(str(stime)[8:10]))
+        end = datetime.datetime(int(str(etime)[:4]),int(str(etime)[5:7]),int(str(etime)[8:10])) + timedelta(days=1)
         
     
         c = 1 if ((end-start).total_seconds()%86400)>0 else 0
@@ -199,14 +206,15 @@ class goes_xray:
         
         return  self.picked_time, fluxA, fluxb 
     
-    
+    def get_relativetime(self,time):
+        return time - ((self.hour_s*3600)+ self.minute_s*60)   
     
     def xray_peaks(self, data, xray_class):
         
         
-        level = {'c':[1e-6, 'g--'], 'M':[1e-5, 'b--'],'X':[1e-4, 'r--'] }
+        level = {'C':[1e-6, 'g--'], 'M':[1e-5, 'b--'],'X':[1e-4, 'r--'] }
         if xray_class == list(level.keys())[0]:
-            prominence, color = level['C'][0], level['c'][1]
+            prominence, color = level['C'][0], level['C'][1]
         elif xray_class == list(level.keys())[1]:
             prominence, color = level['M'][0], level['M'][1]
         else:
@@ -217,11 +225,9 @@ class goes_xray:
         peaks=[data[i] for i in peaks_indces]
         peak_times =[self.picked_time[i] for i in peaks_indces]
         
-        return [peak_times, xray_class,color] , peaks
-    
-    
-    
-    
+        
+        return [[self.get_relativetime(t),color, xray_class] for t in peak_times], peaks
+
 
 class SDO:
     def __init__(self, starttime, endtime, Location):
@@ -272,7 +278,10 @@ class SDO:
                 self.data[Wl]= Fido.fetch(result_[0, 3], site='ROB')
         return self.data
 
-
+    
+    def peek(self, spectrum):
+        spc = sunpy.map.Map(self.data[spectrum])
+        spc.plot()
 
     def plot(self, field_strength_spots=None, level=None):
         
@@ -321,4 +330,129 @@ class SDO:
                 plt.show()
             else:
                 sys.exit('datumn of '+ field_strength_spots +' is missing ... ')
+
+class NOAAreport:
+    def __init__(self,start, end):
+        self.stime = (int(start[11:13])*3600) + ( int(start[14:16])*60)
+        c=0
+        daframe={'Event':[], 'Begin':[],'Max':[], 'End':[],
+                 'Type':[],'Loc/Frq':[], 'Particulars':[], 'Reg':[]}
+        start = datetime.date(int(start[:4]),int(start[5:7]),int(start[8:10]))
+        end = datetime.date(int(end[:4]),int(end[5:7]),int(end[8:10]))
+        while (start <= end):
+            
+            start = str(start)
+            urlpage = 'https://www.solarmonitor.org/data/'+start[:4]+'/'+start[5:7]+'/'+ start[8:10]+'/meta/noaa_events_raw_'+start[:4]+start[5:7]+start[8:10]+'.txt' 
+            
+            df = pd.read_fwf(urlpage,header=None)
+            
+            for i in range(12, len(df[0])):
+                if ((df[0][i][58]=='V') or (df[0][i][58]=='I')):
+                    continue
+                else:
+                    daframe['Event'].append(df[0][i][:4])
+                    if (df[0][i][11:15]=='////'):
+                        daframe['Begin'].append( str(np.nan))
+                    else:
+                        daframe['Begin'].append(   str(int(df[0][i][11:13])+c) + df[0][i][13:15])
+                    if (df[0][i][18:22]=='////'):
+                        daframe['Max'].append( str(np.nan))
+                    else:
+                        daframe['Max'].append(  str(int(df[0][i][18:20]) +c) +df[0][i][20:22])
+                    if (df[0][i][28:32]=='////'):
+                        daframe['End'].append( str(np.nan))
+                    else:
+                        daframe['End'].append( str(int(df[0][i][28:30]) + c) + df[0][i][30:31])
+                    daframe['Type'].append(df[0][i][43:46])
+                    daframe['Loc/Frq'].append(df[0][i][48:55])
+                    daframe['Particulars'].append(df[0][i][58:62])
+                    daframe['Reg'].append(df[0][i][76:80])
+
+            start = datetime.date(int(start[:4]),int(start[5:7]),int(start[8:10]))+ datetime.timedelta(days=1)
+            c+=24
+        self.df = pd.DataFrame(daframe)
+    
+    def unique(self,list_):
+        set_val=[]
+        for v in list_:
+            if v not in set_val:
+                if len(str(v)) !=0:
+                    set_val.append(v)
+        return set_val
+    
+    def show(self, variable=None):
+        if variable is not None:
+            return self.unique(self.df[variable])
+        else:
+            return self.df
+    def Filter(self,activeregion, variable):
+        region = str(activeregion)[-4:]
+        index = []
+        for i in range(len(self.df['Type'])):
+            if ((self.df['Reg'][i] == region) and (self.df['Type'][i]==variable)):
+                index.append(i)
+
+        if len(index) == 0:
+            print('The region is not found, try another date')
+            return index
+        else:
+            return self.df.iloc[index]
+
+    def get_relativetime(self,time):
+        return time - self.stime
+
+    def toseconds(self, activeregion, variable, time):
+        if str(activeregion)[-4:] in self.show('Reg'):
+            if len(self.Filter(activeregion, variable)) != 0: 
+                time_secd = [((int(i[:-2])*3600)+(int(i[-2:])*60)) for i in self.Filter(activeregion, variable)[time]] 
+                l=[]
+                if ((variable == 'XRA') or (variable == 'FLA')):
+                    Xrayclass = [i for i in self.Filter(activeregion, variable)['Particulars']]
+                    for c in range(len(Xrayclass)):
+                        if (time_secd[c] >= self.stime):
+                            if Xrayclass[c][0] == 'A':
+                                l.append([self.get_relativetime(time_secd[c]),'c--', Xrayclass[c]])
+                            if Xrayclass[c][0] == 'B':
+                                l.append([self.get_relativetime(time_secd[c]),'y--', Xrayclass[c]])
+                            if Xrayclass[c][0] == 'C':
+                                l.append([self.get_relativetime(time_secd[c]),'g--', Xrayclass[c]])
+                            if Xrayclass[c][0] == 'M':
+                                l.append([self.get_relativetime(time_secd[c]),'b--', Xrayclass[c]])
+                            if Xrayclass[c][0] == 'X':
+                                l.append([self.get_relativetime(time_secd[c]),'r--', Xrayclass[c]])
+                if variable == 'FLA':
+                    flare = [i for i in self.Filter(activeregion, variable)['Particulars']]
+                    for c in range(len(flare)):
+                        if (time_secd[c] >= self.stime):
+                            l.append([self.get_relativetime(time_secd[c]),'k-', 'FL'])
+                return l      
+            else:
+                print('No data for '+variable + ' for this region')
+                return None 
+        else:
+            print('The region number '+str(activeregion)[-4:]+' is not found. Try another day.')
+
+   
+
+    def combine(self,list_of_lists):
+        List=[]
+        for l in list_of_lists:
+            if l is not None:
+                List += l
+
+        if len(List)>1:
+            l=[]
+            for v in List:
+                l.append(v[0])
+            sortd_t = sorted(l)
+            sorted_list=[]
+            for s in sortd_t:
+                for t in range(len(List)):
+                    if s == List[t][0]:
+                        sorted_list.append(List[t])
+            return sorted_list
+        else:
+            sys.exit('There is no data')
+            
+     
 

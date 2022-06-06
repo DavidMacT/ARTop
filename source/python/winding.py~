@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
+"""
+Created on Wed May  4 10:52:10 2022
+@author: khaled Darwish
+"""
 import matplotlib.pyplot as plt 
 import numpy as np
 import os
@@ -181,8 +184,6 @@ class mapping:
             plt.savefig(self.image_name)
             plt.close()
 
-        plt.show()
-
 
         
     def plot_gif(self, im_st_No, im_ed_No,variable_name, title):
@@ -210,7 +211,7 @@ class timeseries:
 
     def get_specifications(self):
  #       self.path = self.path_ #+'/AR_'+str(self.regionName)
-        file = open(self.path+  'specifications.txt')
+        file = open(self.path+  '/specifications.txt')
         r=[]
         for line in file:
             r.append(line.split()[0])
@@ -226,7 +227,7 @@ class timeseries:
         self.Name_file = 'netWindDatPotFast'+str(cutoff)+'_VS'+str(V_smooth)+'_'+str(Sampling)+'.dat'
 #        self.path = self.path_ #+'/AR_'+str(self.regionName)
 
-        Name = self.path + self.Name_file
+        Name = self.path +'/'+ self.Name_file
 
         file=open(Name)
         upscale_missing_values={'totWindCur':[],
@@ -256,16 +257,14 @@ class timeseries:
             upscale_missing_values['totHel'].append(float(values[i+7]))
             upscale_missing_values['deltaLflux'].append(float(values[i+8]))
             upscale_missing_values['deltaHflux'].append(float(values[i+9]))
-
-       
-            
+    
         return np.array(upscale_missing_values[variable])
 
 
-    def integrate_accum(self, Vrbs):
+    def integrate_accum(self, strtime, endtime, Vrbs):
     
-        stime= datetime.datetime(int(self.st[:4]),int(self.st[4:6]),int(self.st[6:8]),int(self.st[9:11]))
-        etime= datetime.datetime(int(self.et[:4]),int(self.et[4:6]),int(self.et[6:8]),int(self.et[9:11]))
+        stime= datetime.datetime(int(strtime[:4]),int(strtime[5:7]),int(strtime[8:10]),int(strtime[11:13]))
+        etime= datetime.datetime(int(endtime[:4]),int(endtime[5:7]),int(endtime[8:10]),int(endtime[11:13]))
 
         tlength = (etime - stime).total_seconds()
         print('tlength = ', (tlength*5/3600))
@@ -281,7 +280,7 @@ class timeseries:
             integrated.append( (dt/2) * np.sum(y_right + y_left) )   
         
         t_range = np.linspace(st_time,(len(data)*dt),len(integrated))     # N+1 points make N subintervals
-    
+
         return np.array(integrated), t_range   
 
     def mean_std(self,Z, n_points, factor = 3):
@@ -356,10 +355,11 @@ class timeseries:
 #        plt.legend()
         plt.legend(loc=0, bbox_to_anchor=(1, 0.5), fontsize = 'x-small')
 
+        plt.show()
     
         if save is True:
             imagename = Name+'_CO'+self.Name_file[len(self.Name_file)-13:len(self.Name_file)-4]+'.jpg'
-            plt.savefig(str(self.path)[:-5] +'/generated_images/'+imagename)
+            plt.savefig(self.path + 'generated_images/'+ imagename)
 
-        plt.show()
+        
 
