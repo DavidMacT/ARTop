@@ -1,64 +1,97 @@
-# ARTop
-Active Region Topology - a tool for studying topological quantities in solar active regions
 
-<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+Active Region Topology (ARTop) - a tool for studying topological quantities in solar active regions
+---------------------------------------------------------------------------------------------------
+
+This code is for calculating and analysing photospheric topological
+signatures of solar active regions. The code downloads SHARP magnetograms
+and uses these to calculate maps and time series of quantities including
+magnetic helicity and magnetic winding fluxes. Analysis routines allow for
+the straightforward production of figures and allow for the detailed
+comparison of time series to flare times.
+
 Requirements
-<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-
-The code runs on Linux and requires a C++ complier (for the main calculations) and Python (for the analysis routines).
-
-<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-Downloading and calculating the topological quantities 
-<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-
-- Insert the active region number in the read_data.txt file WITHOUT any space.
-
-- The Output directory = '/home/...' 
-  ---> is the directory where the files of input and output will be created at the beginning.
-
-- To download the data of the active region, make the Download_data=true.
- 
-- To calculate the topological quantities, make the Topology=true. 
+------------
 
 
-The tool is designed to give the user flexibily to download the data and compute the topological quantities at the same time or at different times.
-For example, if Download_data = false, the code will read the saved data that are downloaded previously in the input file without downloading the data again.
-
-There is an option to remove the downloaded data in input file after calculating the model finish the topological quantities. These latter quantities are saved in the output file.
-
-***Note: since many files are downloaded as part of these calculations, it is worth keeping a check on the cache folder. This is not done automatically in the code as the location of the cache folder will vary between different machines.
-
-<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-Visualizing the data
-<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
-
-There are two main packages for:
-(1) Visualizing and mapping the computed quantities in the output file.
-(2) Downloading and plotting the data of GOES x-ray and SDO.
-
-The way to use these two packages are demonstrated in the run.py script in the directory ".../source/python/run.py".
-The guidence of using thes packages are explained in the follows.
+The code runs on Linux and requires Python 3, a C++ compiler and OpenMP.
+Several of the analysis routines make use of SunPy and, folowing their example,
+we recommend that Python (and its necessary packages) be installed via Miniconda 3.
 
 
-1. Visualizing and mapping the computed quantities.
----------------------------------------------------
-To map and plot the integrated time series of the quantities, call the package named "winding" as follows
+Running the code
+----------------
 
->>> import winding 
+In the main code directory, first open `read_data.txt`. You should see a list like:
 
-Then insert the following:
-(1) Active region number
-(2) File number that you are interested to plot.
-(3) The path directory that is used in the file "read_data.txt". 
-<For example> if the pathe in the file is ".../ARTop_winding", put the path directory as ".../ARTop_winding/Data"
+```
+Region number=7115,
+Download_data=true,
+Start year=2017,
+Start month=08,
+Start day=28,
+Start hour=09,
+End year=2017,
+End month=08,
+End day=28,
+End hour=10,
+Velocity smoothing=20,
+Input directory=/home/your_directory/input,
+Output directory=/home/your_directory/output,
+Topology=true,
+Cutoff=50,
+Sampling=1,
+Remove_downloaded_images=false,
 
-That is commented in the run.py script.
+```
+
+The `Region number` corresponds to the SHARP number of the active region and not the
+NOAA number. `Download data` is a binary variable. Setting this to `false` means that, if
+you have already downloaded the magnetogram, you can run the code without having to
+download them again. The time variables are self explanitory (always use two digits, e.g.
+09, not 9). `Velocity smoothing` corresponds to how the window size used in the DAVE4VM
+code. The directory variables are self explanitory but these directories must be created
+before running the code. `Topology` means that you want to run the topological calculations
+(which are performed via a C++ code). `Cutoff` is the minimum magnetic field strength that
+you wish to consider for the topological calculations. This value is measures in Gauss.
+`Sampling` determines the resolution at which you perform the topological calculations.
+A value of 1 means that you include all the pixels in the calculation. A value of 3 means
+that you down sample the number of pixels by a factor of 3. Obviously, the larger this value
+is, the faster the calculation, but care is required to make sure that you do not miss important
+information. `Remove_downloaded_images` allows you to delete all the downloaded magnetograms.
+Copies of these files (in a different format) are created, so the information in these files is
+not lost.
+
+Once you have selected values for all the variables in `read_data.txt`, you can run the code by
+typing:
+
+```
+./run_ARTop.sh > outfile &
+```
+Details of how the code is progressing will be stored in `outfile`.
 
 
-1.1 Mapping the topological quantities
---------------------------------------
-The quantities that are avialable in the created file in the output folder as:
+This bash script calls a series of Python and C++ scripts. If selected, a python script
+will first download the magnetograms between the specified start and end times. Another
+Python script will determine the corresponding velocity profiles using the DAVE4VM code
+(Schuck, P. W. Tracking vector magnetograms with the magnetic induction equation.
+Astrophys. J. 683, 1134–1152 (2008)). The original Python version of DAVE4VM can be
+found here: https://github.com/Chicrala/pydave4vm. A Python script is then called to
+calculate the potential field based on the values of `Bz`. In the output directory, in a folder
+called Data, all the magnetic field and velocity files are stored. These are used as input
+for a C++ code that calculates all the topological quantities. Files beginning with `windDataPotentialFast`
+are created and contain the variables that can be used to create maps and time series. These
+are discussed later.
 
+
+Output variables
+----------------
+
+There are several Python scripts that allow for the easy production of maps and time series.
+Examples of how to perform specific plots are given in run.py.Before describing the different
+plots, it is important to understand the structure of the variables in the
+`windDataPotentialFast` files. The variables for creating maps are:
+
+```
 'bz':               z-component of the magnetic field
 'vz':               z-component of the field line velocity field
 'sz':               z-component of the Poynting flux
@@ -72,167 +105,158 @@ The quantities that are avialable in the created file in the output folder as:
 'helvalBraidOnly':  braiding helcity
 'deltaLflux':       delta winding flux
 'deltaHflux':       delta helecity flux
+```
+There are also variables for creating time series:
 
-
-To map <for example> 'bz', the winding mapping should be called as
-
->>> Map = winding.mapping(activeRegion, path_directory)
-
-Then, read the 'bz' data first from the interested file that is created in the output folder as
-
->>> bz = Map.read_data('bz', number_of_file)
-
-NOTE, you should USE the same abbreviation names of the quantities in the code to get the data. To map this quantity, run the following
-
->>> Map.plotmap(bz,title=r'$B_z$')
-
-You can save and zoom in the created map. Also, you can creat animation for the quabtity "bz" from the file number, for example, 150 to file number 300 as follows
-
->>> im_start_No = 150
->>> im_end_No = 300
->>> variable_name = 'bz' 
->>> Map.plot_gif(im_start_No, im_end_No, variable_name, title = 'bz')
-
-
-
-1.2 Plot integrated time series of the quantity
------------------------------------------------
-This function uses the trapzoidal method to integrate a quantity over the whole time range that is specified in the read_data.txt file, i.e. the whole time range of the downloaded data.
-
-The avialable integrated quantities are:
-
+```
 'totWindCur':           total current-carrying winding
 'totWindPot':           total potential winding 
 'totWindBraid':         total braiding winding
 'totHelCur':            total current-carrying helcity 
 'totHelPot':            total potential helicity
-'totHelBraid':          total braiding helicity 
-'totWind':  		total winding
-'totHel':   		total helicity
+'totHelBraid':         	total braiding helicity 
+'totWind':  	        total winding
+'totHel':   	        total helicity
 'deltaLflux':           delta winding flux
 'deltaHflux':           delta helicity flux
+```
+
+These variables are actually time derivatives but it is straightforward to produce their
+accummulations integrated in time. We will now go though an example of each type of plot.
 
 
-
-call the time series function as
-
->>> TS = winding.timeseries(activeRegion, path_directory)
-
-You can get the data from the files, <for example> 'totWind', as
-
->>> L = TS.read_data( 'totWind')
-
-You can integrate the quantity of 'totWind' directly without the previous command by runnig
-
->>> intL, time = TS.integrate_accum('totWind',dt)
-
-The value dt is the time step of calculating the quantities in the files. This command returns the accumulated integrated value with time, that will be used for the time series plot.
-
-** DO rescale the units of the quantities. 
-
-
-To calculate the average anf standard deviation of any quantity, use the command
-
->>> mean, mstd = TS.mean_std(intL, n_points = 2, factor = 3)
-
-intL is the required variable. This function creat a dynamic window of length n_points to calculate the mean and standard deviation. <For example> if n_points = 2, the mean and standard deviation will be calculated for each two consecutive points. 
-factor = 3 is a factor to return mstd as three times the standard deviation, i.e. 3*standard deviation.
-
-
-To overplot the integrated variable with the average values and mstd, put them in a form of list as following:
-
->>> overplot_variables = [intL, mean, mstd]
-
-choose their colors and labels on the plot as
-
->>> colour = ['c-','r-','b:']
->>> label = ['$\dot{\delta L}$', '$\mu(\dot{\delta L})$', '$\mu+3\sigma$']
-
-plot them using the command
-
->>> y_label = r'$winding$'+' '+ '$(km^4)$'
->>> title = 'test'
->>> TS.plot(time, overplot_variables, colour,label,y_label, title, unit='h')
-
-If unit='h' or 'm' or 's', the time unit on x-axis will be hour or minute or second, respectively.
-
-
----------------------------------*************************************---------------------------------
-2. Downaloading and plotting the data of GOES x-ray and SDO.
-------------------------------------------------------------
-To download data from Goes satelites or SDO, call the observation package as
-
->>> import observation
-
-
-2.1 Goes x-ray
---------------
-
-specify the time range and satelite number of Goes x-ray data as
-
->>> start_time = "2021-06-18 18:00"
->>> end_time = "2021-06-20 00:00"
->>> X = observation.goes_xray(start_time, end_time,SatelliteNumber = 16)
-
-
-SatelliteNumber could be GOES number of 13, 14, 15, 16, and 17. To get the data, run
-
->>> picked_time, fluxA, fluxb = X.get_data() 
-
-This give the data of the flux A and flux B of x-rays and their corresponding time. Flux A and flux B are different waveslengths of x-ray. 
-
-If you want to save the files that are download from GOES, make save_files = True and you can also put the directory to save the files
-
->>> path = ".../Data/goesdata"
->>> picked_time, fluxA, fluxb = X.get_data(path, save_files = False) 
-
-
-Plot these variables with time as
-
->>> X.plot_xray(picked_time, fluxA, fluxb)
-
-To pick the peaks above a particular x-ray class and their time during the selected time period, run the command
- 
->>> pt, pv = X.xray_peaks(fluxb,'C') 
-
-where pt return the time of the peaks and pv contains the peaks values. This example gives the peaks above 'c' class. If you replace it with 'M' or 'X', it will give the peaks above M-class or X-class of x-ray. 
-
-fluxb could also be replaced by fluxA as required by the user.
-
-** It is better to not use this peak function for long time periods, i.e. days, because peaks are relative and when the data is so long, some peaks will not be considered any more repect to the others. 
-
-
-- The obtianed times of x-ray peaks could be over plotted the integrated time series plot as following:
-
->>> y_label = r'$winding$'+' '+ '$(km^4)$'
->>> title = 'test'
->>> TS.plot(time, overplot_variables, colour,label,y_label, title ,unit='h', Xray_class=pt)
-
-
-2.2 SDO solar map
+Plotting routines
 -----------------
-To get the location of an active region, go to the link 
-"https://www.spaceweatherlive.com/en/solar-activity/region/... .html"
-<For example> the location of the active region AR12673 could be obtained from
-AR + 12673
-"https://www.spaceweatherlive.com/en/solar-activity/region/12673.html"
 
-To download and map the SDO files, run command as
+All plotting routines are written in Python. Here, we follow the layout in `run.py`, please
+consult this for further details. These routines are there to provide you with a fast and
+informative look at the data. Publication-standard figures will be up to you. The packages
+that need to be imported for plotting are:
 
->>> location = 'S08E23'
->>> start = '2017-09-02 00:00:00'
->>> end = '2017-09-02 00:05:00'
->>> Ob = observation.SDO(start, end, location)
+```
+import os
+import sys
+sys.path.insert(1, os.getcwd() + '/source/python/')
+import winding as win
+import observation
+from observation import NOAAreport as noaa
 
-The plotting function can present the AIA map of the active region for a single wavelength or different wavelengths or hmi side by side. The required map should be put in as list as following
+```
 
->>> Ob.get_map(graphs=['1600', '171','hmi'])
->>> Ob.plot()
+It is important to specify the SHARP number of the active region, such as
 
-If you want to spot the magnetic field strength on the AIA map or hmi, specify the required values of magnetid field strength and the desired map as 
+```
+activeRegion = 7115
+```
 
->>> required_levels = [20, 100, 140, 300, 500]
->>> Ob.plot(field_strength_spots = '1600', level=required_levels)
+Each time the code is run, it adds information to `savedpaths.dat` which stores the active
+region SHARP number beside the output file directory. In this way, you do not need to specify
+the file directory and can use the command
 
+```
+created_files_dir= win.getpaths(os.getcwd(), activeRegion)
+```
+
+To create a map, you can use
+
+```
+Map =win.mapping(activeRegion,created_files_dir)
+vz = Map.read_data('vz', filenumber)
+Map.plotmap(vz,title=r'$v_z$',save=True,variable_name='vz')
+```
+
+By setting `save=True`, you produce a jpg in the folder `generated_images`, which is created
+automatically in the output directory. `filenumber` is the number of the file from which you
+want to create a map. `variable_name` is used to create the file name.
+
+
+Producing a gif of maps is also straightforward and can be achieved with a few lines of code:
+
+```
+Map =win.mapping(activeRegion,created_files_dir)
+im_st_No = 1
+im_ed_No = 100
+variable_name = 'bz'  
+X=Map.plot_gif(im_st_No, im_ed_No, variable_name, title = 'bz')
+
+```
+
+---------------
+
+To create a time series, first read in the data for a particular active region:
+
+```
+TS = win.timeseries(activeRegion, created_files_dir)
+```
+
+To study the winding `L`, for example, first use the following commands:
+
+```
+dLdt = TS.read_data('totWind')
+L, time = TS.integrate_accum('totWind')
+```
+
+The variable `dLdt`, its accumulation (`L(t)`) and `time` are now available for plotting. `time`
+is in seconds and distance in km. To convert `L` to cm^4, set `L=l*1.0e5**4`.
+
+As well as the basic plotting function, we also include here how to overplot a running mean with
+a standard deviation envelope (which can help to identify important spikes in the time series).
+These quantities are calculated using
+
+```
+mean, mstd = TS.mean_std(dLdt,n_points = 2,factor = 3)
+```
+
+`n_points` is the number of previous time steps used to create the running mean. `factor` determines
+the number of standard deviations used for the envelope. Now you can combine the variables for
+plotting
+
+```
+overplot_variables = [dLdt,mean,mstd]
+colour = ['c-','r-','b:']
+label = ['$\dot{L}$', '$\mu(\dot{L})$', '$\mu+3\sigma$']
+
+y_label = r'$winding$'+' '+ '$(cm^4)$'
+title = 'Winding_rate'
+```
+
+These commands are self-explanatory. `title` will appear both as a title and as part of the figure
+file name if that option is selected. The plot command is
+
+```
+X=TS.plot(time,overplot_variables, colour,label,y_label,title,unit='h',oplot=None,save=True)
+
+```
+
+The only entries that need explanation are `oplot` (this is described below) and `save`. Selecting
+`save` creates a jpg in the `generated_images` folder in the output directory.
+
+
+To overplot flare times, information from the daily NOAA reports can be used. These data can easily
+by included in time series plots. An example is given below. Before the time series commands given
+above, consider the following commands:
+
+```
+start_time = '2011-10-11 20:00:00'
+end_time = '2011-10-16 12:00:00'
+variable = 'XRA'
+AR = 'AR11318'
+tr = 'Max'
+report = noaa(start_time,end_time)
+showAll = report.show()
+XR = report.toseconds(AR,'XRA',tr)
+```
+
+These commands download the NOAA reports between the stated times. `report` allows you to see all the
+details. In this example, a list of the maximum of GOES X-ray peaks has been selected for the given
+time span. In the `TS.plot` command above, these times are included with `oplot=XR`. By exploring the
+NOAA reports and modifying the above code, you can also plot other available data.
+
+
+---------------
+
+There is also the possibiilty to download GOES data directly and to plot SDO maps. Examples are given
+in `run.py`. These are modifications of sunpy routines. Documentation for these can be found on the
+sunpy webpage. More details of these may appear in the near future...
 
 

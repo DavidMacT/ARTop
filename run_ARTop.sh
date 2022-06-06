@@ -21,7 +21,9 @@ done < "$file"
 
 cd
 inputdir=${array[11]}
-outputdir=${array[12]}
+outputdir=${array[12]}/Data/
+
+mkdir -p $outputdir
 
 # specifications
 > $outputdir/specifications.txt
@@ -29,16 +31,25 @@ echo ${array[10]} >> $outputdir/specifications.txt
 echo ${array[14]} >> $outputdir/specifications.txt
 echo ${array[15]} >> $outputdir/specifications.txt
 echo 'start time' >> $outputdir/specifications.txt
-echo ${array[2]}${array[3]}${array[4]}'T'${array[5]} >> $outputdir/specifications.txt
+echo ${array[2]}${array[3]}${array[4]}'H'${array[5]} >> $outputdir/specifications.txt
 echo 'end time' >> $outputdir/specifications.txt
-echo ${array[6]}${array[7]}${array[8]}'T'${array[9]} >> $outputdir/specifications.txt
-python $script_path/source/python/numbering.py ${array[2]}  ${array[3]}  ${array[4]}  ${array[5]}  ${array[6]}  ${array[7]}  ${array[8]}  ${array[9]} $outputdir
+echo ${array[6]}${array[7]}${array[8]}'H'${array[9]} >> $outputdir/specifications.txt
+source /home/staff4/dmactaggart/miniconda3/bin/activate
+python $script_path/source/python/numbering.py ${array[2]} ${array[3]} ${array[4]} ${array[5]} ${array[6]} ${array[7]} ${array[8]} ${array[9]} $outputdir $inputdir ${script_path} ${array[0]}
+
+# regionData if no download
+if [ "${array[1]}" == "false" ]; then
+    > $outputdir/regionData.dat
+    source /home/staff4/dmactaggart/miniconda3/bin/activate
+    python $script_path/source/python/buildRegDat.py $inputdir $outputdir ${array[0]} ${array[2]} ${array[3]} ${array[4]} ${array[5]}
+fi
+
 
 # download the magnetogram data
 if [ "${array[1]}" == "true" ]; then
-    > $outputdir/regionData.dat
-    
-    python $script_path/source/python/MagDown.py ${array[0]} ${array[2]} ${array[3]} ${array[4]} ${array[5]} ${array[6]} ${array[7]} ${array[8]} ${array[9]} $inputdir $outputdir
+    > $outputdir/regionData.dat	
+    source /home/staff4/dmactaggart/miniconda3/bin/activate
+    python $script_path/source/python/MagDown.py ${array[0]} ${array[2]} ${array[3]} ${array[4]} ${array[5]} ${array[6]} ${array[7]} ${array[8]} ${array[9]} $inputdir $outputdir 
 fi
 
 # get region pixel numbers
@@ -56,6 +67,7 @@ echo "Number of time  dumps: ${endfl}"
 echo '  '
 echo 'Calculating the velocity distributions..'
 # calculate the velocity distributions
+source /home/staff4/dmactaggart/miniconda3/bin/activate
 python $script_path/source/python/DAVE4vm.py ${array[0]} ${array[2]} ${array[3]} ${array[4]} ${array[5]} ${array[6]} ${array[7]} ${array[8]} ${array[9]} $inputdir $outputdir ${array[10]}
 
 
@@ -66,6 +78,7 @@ fi
 
 echo 'Calculating the potential field..'
 # calculate the potential fields
+source /home/staff4/dmactaggart/miniconda3/bin/activate
 python $script_path/source/python/potentialbxby.py ${array[0]} 0 $endfl $nx $ny $outputdir
 
 ##----------------------------------------------------------------------------
