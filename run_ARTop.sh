@@ -34,13 +34,11 @@ echo 'start time' >> $outputdir/specifications.txt
 echo ${array[2]}${array[3]}${array[4]}'H'${array[5]} >> $outputdir/specifications.txt
 echo 'end time' >> $outputdir/specifications.txt
 echo ${array[6]}${array[7]}${array[8]}'H'${array[9]} >> $outputdir/specifications.txt
-source /home/staff4/dmactaggart/miniconda3/bin/activate
 python $script_path/source/python/numbering.py ${array[2]} ${array[3]} ${array[4]} ${array[5]} ${array[6]} ${array[7]} ${array[8]} ${array[9]} $outputdir $inputdir ${script_path} ${array[0]}
 
 # regionData if no download
 if [ "${array[1]}" == "false" ]; then
     > $outputdir/regionData.dat
-    source /home/staff4/dmactaggart/miniconda3/bin/activate
     python $script_path/source/python/buildRegDat.py $inputdir $outputdir ${array[0]} ${array[2]} ${array[3]} ${array[4]} ${array[5]}
 fi
 
@@ -48,7 +46,6 @@ fi
 # download the magnetogram data
 if [ "${array[1]}" == "true" ]; then
     > $outputdir/regionData.dat	
-    source /home/staff4/dmactaggart/miniconda3/bin/activate
     python $script_path/source/python/MagDown.py ${array[0]} ${array[2]} ${array[3]} ${array[4]} ${array[5]} ${array[6]} ${array[7]} ${array[8]} ${array[9]} $inputdir $outputdir 
 fi
 
@@ -67,7 +64,6 @@ echo "Number of time  dumps: ${endfl}"
 echo '  '
 echo 'Calculating the velocity distributions..'
 # calculate the velocity distributions
-source /home/staff4/dmactaggart/miniconda3/bin/activate
 python $script_path/source/python/DAVE4vm.py ${array[0]} ${array[2]} ${array[3]} ${array[4]} ${array[5]} ${array[6]} ${array[7]} ${array[8]} ${array[9]} $inputdir $outputdir ${array[10]}
 
 
@@ -78,7 +74,6 @@ fi
 
 echo 'Calculating the potential field..'
 # calculate the potential fields
-source /home/staff4/dmactaggart/miniconda3/bin/activate
 python $script_path/source/python/potentialbxby.py ${array[0]} 0 $endfl $nx $ny $outputdir
 
 ##----------------------------------------------------------------------------
