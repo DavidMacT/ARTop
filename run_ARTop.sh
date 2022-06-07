@@ -64,7 +64,7 @@ echo "Number of time  dumps: ${endfl}"
 echo '  '
 echo 'Calculating the velocity distributions..'
 # calculate the velocity distributions
-python $script_path/source/python/DAVE4vm.py ${array[0]} ${array[2]} ${array[3]} ${array[4]} ${array[5]} ${array[6]} ${array[7]} ${array[8]} ${array[9]} $inputdir $outputdir ${array[10]}
+python $script_path/source/python/DAVE4vm.py ${array[0]} ${array[2]} ${array[3]} ${array[4]} ${array[5]} ${array[6]} ${array[7]} ${array[8]} ${array[9]} $inputdir $outputdir ${array[10]} $endfl
 
 
 #remove the initial download files
