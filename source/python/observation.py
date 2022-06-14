@@ -345,28 +345,29 @@ class NOAAreport:
             urlpage = 'https://www.solarmonitor.org/data/'+start[:4]+'/'+start[5:7]+'/'+ start[8:10]+'/meta/noaa_events_raw_'+start[:4]+start[5:7]+start[8:10]+'.txt' 
             
             df = pd.read_fwf(urlpage,header=None)
-            
-            for i in range(12, len(df[0])):
-                if ((df[0][i][58]=='V') or (df[0][i][58]=='I')):
-                    continue
-                else:
-                    daframe['Event'].append(df[0][i][:4])
-                    if (df[0][i][11:15]=='////'):
-                        daframe['Begin'].append( str(np.nan))
+            if 'NO EVENT REPORTS.' not in list(df[0]):
+                print(start)            
+                for i in range(12, len(df[0])):
+                    if ((df[0][i][58]=='V') or (df[0][i][58]=='I')):
+                        continue
                     else:
-                        daframe['Begin'].append(   str(int(df[0][i][11:13])+c) + df[0][i][13:15])
-                    if (df[0][i][18:22]=='////'):
-                        daframe['Max'].append( str(np.nan))
-                    else:
-                        daframe['Max'].append(  str(int(df[0][i][18:20]) +c) +df[0][i][20:22])
-                    if (df[0][i][28:32]=='////'):
-                        daframe['End'].append( str(np.nan))
-                    else:
-                        daframe['End'].append( str(int(df[0][i][28:30]) + c) + df[0][i][30:31])
-                    daframe['Type'].append(df[0][i][43:46])
-                    daframe['Loc/Frq'].append(df[0][i][48:55])
-                    daframe['Particulars'].append(df[0][i][58:62])
-                    daframe['Reg'].append(df[0][i][76:80])
+                        daframe['Event'].append(df[0][i][:4])
+                        if (df[0][i][11:15]=='////'):
+                            daframe['Begin'].append( str(np.nan))
+                        else:
+                            daframe['Begin'].append(   str(int(df[0][i][11:13])+c) + df[0][i][13:15])
+                        if (df[0][i][18:22]=='////'):
+                            daframe['Max'].append( str(np.nan))
+                        else:
+                            daframe['Max'].append(  str(int(df[0][i][18:20]) +c) +df[0][i][20:22])
+                        if (df[0][i][28:32]=='////'):
+                            daframe['End'].append( str(np.nan))
+                        else:
+                            daframe['End'].append( str(int(df[0][i][28:30]) + c) + df[0][i][30:31])
+                        daframe['Type'].append(df[0][i][43:46])
+                        daframe['Loc/Frq'].append(df[0][i][48:55])
+                        daframe['Particulars'].append(df[0][i][58:62])
+                        daframe['Reg'].append(df[0][i][76:80])
 
             start = datetime.date(int(start[:4]),int(start[5:7]),int(start[8:10]))+ datetime.timedelta(days=1)
             c+=24
