@@ -63,7 +63,7 @@ overplot_variables = [ddeltaL,mean,mstd]
 colour = ['c-','r-','b:']
 label = ['$\dot{\delta L}$', '$\mu(\dot{\delta L})$', '$\mu+3\sigma$']
 
-y_label = r'$\dot{\delta L}'+' '+ '$(cm^4/s)$'
+y_label = r'$\dot{\delta L}$'+' '+ '$(cm^4/s)$'
 title = 'test'
 X=TS.plot(time, overplot_variables, colour,label,y_label, 'test',unit='h')
 
@@ -72,11 +72,13 @@ X=TS.plot(time, overplot_variables, colour,label,y_label, 'test',unit='h')
 Plot NOAA 
 <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
 '''
+# search NOAA reports between these times
 start_time = '2017-09-02 10:00:00'
 end_time = '2017-09-03 20:00:00'
 
+# choose some parameters for searching
 variable = 'FLA'
-activeregion = 'AR12674'
+activeregion = 'AR12673'
 tr = 'Begin'
 
 report = noaa(start_time,end_time)
@@ -88,7 +90,7 @@ Fls = report.toseconds(activeregion, 'FLA', tr)
 combine = report.combine([XRs,Fls])    
 
 
-overplot_variables = [intL,mean,mstd]
+overplot_variables = [ddeltaL,mean,mstd]
 colour = ['c-','r-','b:']
 label = ['$\dot{\delta L}$', '$\mu(\dot{\delta L})$', '$\mu+3\sigma$']
 
