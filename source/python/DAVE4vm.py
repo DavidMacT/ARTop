@@ -807,15 +807,15 @@ if (num_steps>2):
 
                     c+=1
                 else:
-                    print('The file '+ str("bz_"+regionName+"_{:d}.txt".format(t))+' is not exist')
+                    print('The file '+ str("bz_"+regionName+"_{:d}.txt".format(t))+' does not exist')
                     continue
 
             else:
-                print('The file '+ str("by_"+regionName+"_{:d}.txt".format(t))+' is not exist')
+                print('The file '+ str("by_"+regionName+"_{:d}.txt".format(t))+' does not exist')
                 continue
 
         else:
-            print('The file '+ str("bx_"+regionName+"_{:d}.txt".format(t))+' is not exist')
+            print('The file '+ str("bx_"+regionName+"_{:d}.txt".format(t))+' does not exist')
             continue
 
     print('number of calculated files: ', 3*c)
