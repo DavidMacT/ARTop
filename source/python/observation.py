@@ -10,6 +10,7 @@ import netCDF4 as nc
 import os
 import requests
 from scipy.signal import find_peaks
+import requests
 
 import sunpy.map
 from sunpy.net import Fido, attrs as a
@@ -337,21 +338,23 @@ class NOAAreport:
         c=0
         daframe={'Event':[], 'Begin':[],'Max':[], 'End':[],
                  'Type':[],'Loc/Frq':[], 'Particulars':[], 'Reg':[]}
+
         start = datetime.date(int(start[:4]),int(start[5:7]),int(start[8:10]))
         end = datetime.date(int(end[:4]),int(end[5:7]),int(end[8:10]))
         while (start <= end):
             
             start = str(start)
             urlpage = 'https://www.solarmonitor.org/data/'+start[:4]+'/'+start[5:7]+'/'+ start[8:10]+'/meta/noaa_events_raw_'+start[:4]+start[5:7]+start[8:10]+'.txt' 
-            
-            df = pd.read_fwf(urlpage,header=None)
-            if 'NO EVENT REPORTS.' not in list(df[0]):
-                print(start)            
-                for i in range(12, len(df[0])):
-                    if ((df[0][i][58]=='V') or (df[0][i][58]=='I')):
-                        continue
-                    else:
-                        daframe['Event'].append(df[0][i][:4])
+            response = requests.get(urlpage)
+            if response.status_code == 200:
+                df = pd.read_fwf(urlpage,header=None)
+                if 'NO EVENT REPORTS.' not in list(df[0]):
+                    print(start)            
+                    for i in range(12, len(df[0])):
+                        if ((df[0][i][58]=='V') or (df[0][i][58]=='I')):
+                            continue
+                        else:
+                            daframe['Event'].append(df[0][i][:4])
                         if (df[0][i][11:15]=='////'):
                             daframe['Begin'].append( str(np.nan))
                         else:
@@ -368,10 +371,11 @@ class NOAAreport:
                         daframe['Loc/Frq'].append(df[0][i][48:55])
                         daframe['Particulars'].append(df[0][i][58:62])
                         daframe['Reg'].append(df[0][i][76:80])
-
+            else:
+                print('Report missing')
             start = datetime.date(int(start[:4]),int(start[5:7]),int(start[8:10]))+ datetime.timedelta(days=1)
             c+=24
-        self.df = pd.DataFrame(daframe)
+            self.df = pd.DataFrame(daframe)
     
     def unique(self,list_):
         set_val=[]
