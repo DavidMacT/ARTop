@@ -631,7 +631,7 @@ file_length=len(os.listdir(dir_))
 
 c=0              # number of calculated files
 if (num_steps>2):
-    for t in range(num_steps-1):
+    for t in range(num_steps):
         ch_bx1, ch_bx2 = dir_+"/bx_"+regionName+"_{:d}.txt".format(t) , dir_+"/bx_"+regionName+"_{:d}.txt".format(t+1)
         ch_by1, ch_by2 = dir_+"/by_"+regionName+"_{:d}.txt".format(t) , dir_+"/by_"+regionName+"_{:d}.txt".format(t+1)
         ch_bz1, ch_bz2 = dir_+"/bz_"+regionName+"_{:d}.txt".format(t) , dir_+"/bz_"+regionName+"_{:d}.txt".format(t+1)

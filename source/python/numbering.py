@@ -9,6 +9,7 @@ import datetime
 
 def number_list(stime, etime, output_dir):
     expct_filesNo = (etime - stime).total_seconds()/720
+    expct_filesNo += 1 # start counting from zero
     add = open(output_dir+'/specifications.txt', 'a')
     add.write(str(int(expct_filesNo))+'\n')
     add.close()

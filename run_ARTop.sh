@@ -23,6 +23,7 @@ cd
 inputdir=${array[11]}
 outputdir=${array[12]}/Data/
 
+mkdir -p $inputdir
 mkdir -p $outputdir
 
 # specifications

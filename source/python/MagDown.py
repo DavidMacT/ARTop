@@ -90,7 +90,7 @@ each 1 hour has 5 readings with time resolution of 12 minutes.
 '''
 
 i=0
-while(start_time <end_time):
+while(start_time<=end_time):
     for j in range(5):      # 5 instances in each 1 hour.
         if (5*i+j)>-1 : 
             url='http://jsoc.stanford.edu/cgi-bin/ajax/jsoc_info?ds=hmi.sharp_cea_720s['+regionNumber+']['+st_y+'.'+str(M)+'.'+str(d)+'_'+str(H)+':'+str("{:02d}".format(12*j))+':00_TAI]&op=rs_list&key=IMCRVAL1,NOAA_ARS&seg=Bp,Br,Bt'
