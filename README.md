@@ -253,6 +253,101 @@ time span. In the `TS.plot` command above, these times are included with `oplot=
 NOAA reports and modifying the above code, you can also plot other available data.
 
 
+NOAA reports
+------------
+
+The functionality of attaining flare data from daily NOAA reports was demonstrated in the above example.
+We will now look into this useful feature in more detail.
+
+The minimum information required is a time window in which to look at. For example,
+
+```
+start_time = '2011-02-10 20:00:00'
+end_time = '2011-02-22 12:00:00'
+report = noaa(start_time,end_time)
+```
+will extract information from the NOAA between the specified times. The reports are downloaded from 
+www.solarmonitor.org  and the variable `report` contains the follwing the variables from the reports:
+
+```
+Event
+Begin
+Max
+End
+Type
+Loc/Frq
+Particulars
+Reg
+```
+For flares, `Type` = `FLA` or `XRA`. For the latter, `Particulars` gives the GOES classification. `Begin`, 
+`Max` and `End` correspond to the beginning, maximum and end of the flare. `Reg` is the active region number.
+`report` contains too much information, but it is simple to extract key flare data. For example, if you wish
+to find the maxima of the X-ray peaks during the specified timespan for a particular active region, you just
+need to specify that you want `Max` and give the NOAA active region name:
+
+```
+activeRegion = `AR11158`
+variable = `XRA`
+fltr_events = report.Filter(activeRegion,variable)
+print(fltr_events)
+```
+
+For the above times, the output of the above code is
+
+```
+    Event  Begin    Max   End Type  Loc/Frq Particulars   Reg
+12   6210   7236   7242   724  XRA  1-8A           B8.5  1158
+18   6270   8429   8436   844  XRA  1-8A           C1.1  1158
+19   6280   8544   8556   861  XRA  1-8A           C4.7  1158
+26   6310   8928   8938   894  XRA  1-8A           M6.6  1158
+64   6560   9835   9842   984  XRA  1-8A           C1.6  1158
+69   6580  10029  10049  1010  XRA  1-8A           C8.3  1158
+76   6620  10251  10258  1030  XRA  1-8A           C6.6  1158
+81   6660  10439  10449  1050  XRA  1-8A           C1.8  1158
+84   6680  10751  10800  1082  XRA  1-8A           C1.7  1158
+87   6710  10947  11027  1104  XRA  1-8A           C7.0  1158
+142  7650  17209  17215  1722  XRA  1-8A           C1.5  1158
+143  7710  17333  17336  1734  XRA  1-8A           C1.0  1158
+144  7720  17444  17447  1745  XRA  1-8A           C1.2  1158
+146  7730  17609  17613  1761  XRA  1-8A           C1.2  1158
+148  7760  17724  17730  1773  XRA  1-8A           C1.9  1158
+151  7770  17825  17828  1783  XRA  1-8A           C2.6  1158
+155  7800  18033  18036  1803  XRA  1-8A           C2.4  1158
+158  8010  19302  19308  1931  XRA  1-8A           C1.7  1158
+182  8460  21733  21737  2174  XRA  1-8A           C1.3  1158
+185  8480  21821  21825  2183  XRA  1-8A           C1.8  1158
+204  8660  22340  22344  2234  XRA  1-8A           C1.9  1158
+213  9100  26613  26624  2662  XRA  1-8A           C4.6  1158
+214  9110  26710  26715  2671  XRA  1-8A           C1.8  1158
+215  9130  26804  26810  2681  XRA  1-8A           C1.5  1158
+216  9140  26900  26906  2690  XRA  1-8A           C4.1  1158
+218  9160  27301  27306  2730  XRA  1-8A           C2.7  1158
+219  9170  27400  27404  2740  XRA  1-8A           C1.8  1158
+220  9180  27408  27412  2741  XRA  1-8A           C7.8  1158
+```
+
+Note that if a report does not exist, the message `Report missing` will appear and the code will skip
+to the next day. If there is a report but all that is written is `NO EVENT REPORTS.`, the code will also
+skip to the next day.
+
+For plotting flare information on time series, you can further filter the information using
+
+```
+ft = `Max`
+XRAs = report.toseconds(activeRegion,variable,ft)
+```
+`XRAs` is a list that contains the maximum flare times in seconds relative to the start time, a colour for 
+plotting (see below) and the GOES classification. When plotting, the colour classification is  
+
+```
+A-class cyan
+B-class yellow
+C-class green
+M-class blue
+X-class red
+```
+
+
 ---------------
 
 There is also the possibiilty to download GOES data directly and to plot SDO maps. Examples are given
