@@ -347,6 +347,23 @@ M-class blue
 X-class red
 ```
 
+Batch mode
+----------
+
+The code has been desgined to run process one active region at a time. This is because many files are downloaded
+for the calculations and this way users can run the code easily on a laptop. If you have the resources, however,
+you can run the code in batch mode and perform the calculations for several active regions in paralel. To do this,
+first create a folder called `batch_info`. Inside this, create files `read_data_x.txt`, in which each file contains 
+all the details from `read_data.txt` and `x` is a number to be looped through. Every `read_data_x.txt` can represent 
+a different active region.`For 
+
+In `batch_run.sh`, change `number_of_files` to the number of files you created in `batch_info`. In `run_ARTop.sh`, 
+comment out the line below `For a single active region` and uncomment the block below `For batch mode`. Then run 
+
+```
+./batch_run.sh
+```
+
 
 ---------------
 
