@@ -7,7 +7,18 @@ script_path=`eval "cd \"$script_path\" && pwd"`
 main_dir=$script_path/
 src=$script_path/source
 
+# for a single active region
 file=read_data.txt
+
+# for batch mode
+#while getopts u: flag
+#do
+#    case "${flag}" in
+#        u) filename=${OPTARG};;
+#    esac
+#done
+#file=$filename.txt
+#echo "file: $file"
 
 # declaring array list and index iterator
 declare -a array=()
@@ -68,7 +79,7 @@ echo 'Calculating the velocity distributions..'
 python $script_path/source/python/DAVE4vm.py ${array[0]} ${array[2]} ${array[3]} ${array[4]} ${array[5]} ${array[6]} ${array[7]} ${array[8]} ${array[9]} $inputdir $outputdir ${array[10]} $endfl
 
 
-#remove the initial download files
+# remove the initial download files
 if [ "${array[16]}" == "true" ]; then
     rm -rf $inputdir
 fi
