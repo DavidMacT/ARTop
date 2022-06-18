@@ -358,7 +358,7 @@ all the details from `read_data.txt` and `x` is a number to be looped through. E
 a different active region.`For 
 
 In `batch_run.sh`, change `number_of_files` to the number of files you created in `batch_info`. In `run_ARTop.sh`, 
-comment out the line below `For a single active region` and uncomment the block below `For batch mode`. Then run 
+comment out the line below `for a single active region` and uncomment the block below `for batch mode`. Then run 
 
 ```
 ./batch_run.sh
