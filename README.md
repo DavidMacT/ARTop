@@ -350,7 +350,7 @@ X-class red
 Batch mode
 ----------
 
-The code has been desgined to run process one active region at a time. This is because many files are downloaded
+The code has been desgined to process one active region at a time. This is because many files are downloaded
 for the calculations and this way users can run the code easily on a laptop. If you have the resources, however,
 you can run the code in batch mode and perform the calculations for several active regions in paralel. To do this,
 first create a folder called `batch_info`. Inside this, create files `read_data_x.txt`, in which each file contains 
