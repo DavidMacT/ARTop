@@ -57,7 +57,8 @@ you wish to consider for the topological calculations. This value is measures in
 A value of 1 means that you include all the pixels in the calculation. A value of 3 means
 that you down sample the number of pixels by a factor of 3. Obviously, the larger this value
 is, the faster the calculation, but care is required to make sure that you do not miss important
-information. `Remove_downloaded_images` allows you to delete all the downloaded magnetograms.
+information (we offer no guarantees, only use this if you are confident that it is producing 
+sensible output). `Remove_downloaded_images` allows you to delete all the downloaded magnetograms.
 Copies of these files (in a different format) are created, so the information in these files is
 not lost.
 
