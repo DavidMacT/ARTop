@@ -171,13 +171,14 @@ class mapping:
         plt.rcParams.update({'font.size':16})
         plt.figure(figsize=(12, 10))
         plt.contourf(X,Y,Z,v,cmap='Greys_r')
+        plt.ticklabel_format(axis="both", style="sci", scilimits=(0,0))
         plt.clim(co_rang_st , co_rang_ed)
         
         c = np.linspace(co_rang_st, co_rang_ed, 10, endpoint=True)
         plt.colorbar(ticks=c)
         
-        plt.xlabel('X pixel')
-        plt.ylabel('Y pixel')
+        plt.xlabel('X (km)')
+        plt.ylabel('Y (km)')
 
         plt.title( title, loc='center', fontsize = 16)
         if save is True:
