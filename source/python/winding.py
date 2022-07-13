@@ -133,11 +133,14 @@ class mapping:
         sorted_variable = self.sort(variables, 'X1')
         nx, ny = self.getnxny()
         
-        if ((nx%Sampling != 0) and (ny%Sampling != 0)):
+        if (nx%Sampling != 0):
             nx = int(nx/Sampling) + 1
+        else:
+            nx = int(nx/Sampling)
+        if (ny%Sampling != 0):
             ny = int(ny/Sampling) + 1
         else:
-            nx, ny = int(nx/Sampling) , int(ny/Sampling)
+            ny = int(ny/Sampling)
             
         variable = self.convert_array(nx,ny, sorted_variable[Variable])
         return variable       
@@ -155,8 +158,9 @@ class mapping:
            
     def plotmap(self,Z, title,save=False, variable_name=None):
         nx, ny = self.getnxny()
-        ny = np.linspace(0, ny,len(Z))
-        nx = np.linspace(0, nx,len(Z[0]))
+        km_factor = 360
+        ny = np.linspace(0, ny*km_factor,len(Z))
+        nx = np.linspace(0, nx*km_factor,len(Z[0]))
         X,Y = np.meshgrid(nx,ny)
         
         co_rang_st = self.plot_limit(Z)[0]
@@ -166,7 +170,7 @@ class mapping:
         
         plt.rcParams.update({'font.size':16})
         plt.figure(figsize=(12, 10))
-        plt.contourf(X,Y,Z,v,cmap='nipy_spectral')
+        plt.contourf(X,Y,Z,v,cmap='Greys_r')
         plt.clim(co_rang_st , co_rang_ed)
         
         c = np.linspace(co_rang_st, co_rang_ed, 10, endpoint=True)
