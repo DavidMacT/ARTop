@@ -85,13 +85,18 @@ class mapping:
         
         V_smooth, cutoff, Sampling  = self.get_specifications()
 
-        self.filename= 'windDatPotentialFastCO'+str(cutoff)+'_VS'+str(V_smooth)+'_'+str(Sampling)+'_'+str(filenumber)+'.dat'
+        self.filename = 'windDatPotentialFastCO'+str(cutoff)+'_VS'+str(V_smooth)+'_'+str(Sampling)+'_'+str(filenumber)+'.dat'
 
-        Name= self.path + '/'+self.filename
+        Name = self.path + '/'+self.filename
         
         file=open(Name)
-    
-        variables={
+        check = file.readline()
+        check = check.strip()
+        file.seek(0)
+        if check == 'N':
+            variable = None
+        else:
+            variables={
                 'X1':list(),
                 'X2':list(),
                 'bz':[],
@@ -108,42 +113,42 @@ class mapping:
                 'deltaLflux': [],
                 'deltaHflux': []
             }    
-        
-        for line in file:
-            r=line.split()
-            if len(r)!=1:
-                variables['X1'].append(float(r[0]))
-                variables['X2'].append(float(r[1]))
-                variables['bz'].append(float(r[2]))
-                variables['vz'].append(float(r[3]))
-                variables['sz'].append(float(r[4]))
-                variables['windvalCur'].append(float(r[5]))
-                variables['helvalCur'].append(float(r[6]))
-                variables['windvalPot'].append(float(r[7]))
-                variables['helvalPot'].append(float(r[8]))
-                variables['windvalBraidOnly'].append(float(r[9]))
-                variables['helvalBraidOnly'].append(float(r[10]))
-                variables['wind'].append(float(r[11]))
-                variables['hel'].append(float(r[12]))
-                variables['deltaLflux'].append(float(r[13]))
-                variables['deltaHflux'].append(float(r[14]))
+            for line in file:
+                r=line.split()
+                if len(r)!=1:
+                    variables['X1'].append(float(r[0]))
+                    variables['X2'].append(float(r[1]))
+                    variables['bz'].append(float(r[2]))
+                    variables['vz'].append(float(r[3]))
+                    variables['sz'].append(float(r[4]))
+                    variables['windvalCur'].append(float(r[5]))
+                    variables['helvalCur'].append(float(r[6]))
+                    variables['windvalPot'].append(float(r[7]))
+                    variables['helvalPot'].append(float(r[8]))
+                    variables['windvalBraidOnly'].append(float(r[9]))
+                    variables['helvalBraidOnly'].append(float(r[10]))
+                    variables['wind'].append(float(r[11]))
+                    variables['hel'].append(float(r[12]))
+                    variables['deltaLflux'].append(float(r[13]))
+                    variables['deltaHflux'].append(float(r[14]))
                 
-            else:
-                break
-        sorted_variable = self.sort(variables, 'X1')
-        nx, ny = self.getnxny()
-        
-        if (nx%Sampling != 0):
-            nx = int(nx/Sampling) + 1
-        else:
-            nx = int(nx/Sampling)
-        if (ny%Sampling != 0):
-            ny = int(ny/Sampling) + 1
-        else:
-            ny = int(ny/Sampling)
+                else:
+                    break
             
-        variable = self.convert_array(nx,ny, sorted_variable[Variable])
-        return variable       
+            sorted_variable = self.sort(variables, 'X1')
+            nx, ny = self.getnxny()
+        
+            if (nx%Sampling != 0):
+                nx = int(nx/Sampling) + 1
+            else:
+                nx = int(nx/Sampling)
+            if (ny%Sampling != 0):
+                ny = int(ny/Sampling) + 1
+            else:
+                ny = int(ny/Sampling)
+            
+            variable = self.convert_array(nx,ny, sorted_variable[Variable])
+        return variable        
    
          
     def plot_limit(self, Variable_):
@@ -157,36 +162,39 @@ class mapping:
     
            
     def plotmap(self,Z, title,save=False, variable_name=None):
-        nx, ny = self.getnxny()
-        km_factor = 360
-        ny = np.linspace(0, ny*km_factor,len(Z))
-        nx = np.linspace(0, nx*km_factor,len(Z[0]))
-        X,Y = np.meshgrid(nx,ny)
+        if Z is None:
+            print('Missing file')
+        else:
+            nx, ny = self.getnxny()
+            km_factor = 360
+            ny = np.linspace(0, ny*km_factor,len(Z))
+            nx = np.linspace(0, nx*km_factor,len(Z[0]))
+            X,Y = np.meshgrid(nx,ny)
         
-        co_rang_st = self.plot_limit(Z)[0]
-        co_rang_ed = self.plot_limit(Z)[1]
+            co_rang_st = self.plot_limit(Z)[0]
+            co_rang_ed = self.plot_limit(Z)[1]
         
-        v = np.linspace(co_rang_st, co_rang_ed, 60, endpoint=True)
+            v = np.linspace(co_rang_st, co_rang_ed, 60, endpoint=True)
         
-        plt.rcParams.update({'font.size':16})
-        plt.figure(figsize=(12, 10))
-        plt.contourf(X,Y,Z,v,cmap='Greys_r')
-        plt.ticklabel_format(axis="both", style="sci", scilimits=(0,0))
-        plt.clim(co_rang_st , co_rang_ed)
+            plt.rcParams.update({'font.size':16})
+            plt.figure(figsize=(12, 10))
+            plt.contourf(X,Y,Z,v,cmap='Greys_r')
+            plt.ticklabel_format(axis="both", style="sci", scilimits=(0,0))
+            plt.clim(co_rang_st , co_rang_ed)
         
-        c = np.linspace(co_rang_st, co_rang_ed, 10, endpoint=True)
-        plt.colorbar(ticks=c)
+            c = np.linspace(co_rang_st, co_rang_ed, 10, endpoint=True)
+            plt.colorbar(ticks=c)
         
-        plt.xlabel('X (km)')
-        plt.ylabel('Y (km)')
+            plt.xlabel('X (km)')
+            plt.ylabel('Y (km)')
 
-        plt.title( title, loc='center', fontsize = 16)
-        if save is True:
-            self.image_name = str(self.path)[:-5] +'/generated_images/'+ variable_name+'_'+self.filename[len(self.filename)-17:len(self.filename)-4]+'.jpg'
-            plt.savefig(self.image_name)
-            plt.close()
+            plt.title( title, loc='center', fontsize = 16)
+            if save is True:
+                self.image_name = str(self.path)[:-5] +'/generated_images/'+ variable_name+'_'+self.filename[len(self.filename)-17:len(self.filename)-4]+'.jpg'
+                plt.savefig(self.image_name)
+                plt.close()
 
-        plt.show()
+            plt.show()
 
 
         
@@ -198,10 +206,12 @@ class mapping:
         
         for im in range(im_st_No, im_ed_No+1):
             image_array = self.read_data(variable_name, im)
-            self.plotmap(image_array , title, save=True, variable_name=variable_name)
-
-            imgs.append(Image.open(self.image_name))
-            os.remove(self.image_name)
+            if image_array is None:
+                print('Skipping empty file')
+            else:
+                self.plotmap(image_array , title, save=True, variable_name=variable_name)
+                imgs.append(Image.open(self.image_name))
+                os.remove(self.image_name)
             
         imgs[0].save(fp_out, save_all=True, append_images=imgs[1:], duration=200, loop=0)
 
