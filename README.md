@@ -182,6 +182,9 @@ X=Map.plot_gif(im_st_No, im_ed_No, variable_name, title = 'bz')
 
 ```
 
+If there are missing data, these will be skipped when producing the gif. Therefore, if many 
+timesteps are missing, you should see a jump in the gif animation.
+
 ---------------
 
 To create a time series, first read in the data for a particular active region:
