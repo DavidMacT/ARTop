@@ -44,23 +44,8 @@ Remove_downloaded_images=false,
 
 ```
 
-The `Region number` corresponds to the SHARP number of the active region and not the
-NOAA number. `Download data` is a binary variable. Setting this to `false` means that, if
-you have already downloaded the magnetogram, you can run the code without having to
-download them again. The time variables are self explanitory (always use two digits, e.g.
-09, not 9). `Velocity smoothing` corresponds to how the window size used in the DAVE4VM
-code. The directory variables are self explanitory but these directories must be created
-before running the code. `Topology` means that you want to run the topological calculations
-(which are performed via a C++ code). `Cutoff` is the minimum magnetic field strength that
-you wish to consider for the topological calculations. This value is measures in Gauss.
-`Sampling` determines the resolution at which you perform the topological calculations.
-A value of 1 means that you include all the pixels in the calculation. A value of 3 means
-that you down sample the number of pixels by a factor of 3. Obviously, the larger this value
-is, the faster the calculation, but care is required to make sure that you do not miss important
-information (we offer no guarantees, only use this if you are confident that it is producing 
-sensible output). `Remove_downloaded_images` allows you to delete all the downloaded magnetograms.
-Copies of these files (in a different format) are created, so the information in these files is
-not lost.
+The `Region number` corresponds to the SHARP number of the active region and not the NOAA number. `Download data` is a binary variable. Setting this to `false` means that, if you have already downloaded the magnetogram, you can run the code without having to download them again. The time variables are self explanitory (always use two digits, e.g. 09, not 9). `Velocity smoothing` corresponds to how the window size used in the DAVE4VM code. The directory variables require the full paths in order to work properly. `Topology` means that you want to run the topological calculations (which are performed via a C++ code). `Cutoff` is the minimum magnetic field strength that you wish to consider for the topological calculations. This value is measures in Gauss.
+`Sampling` determines the resolution at which you perform the topological calculations. A value of 1 means that you include all the pixels in the calculation. A value of 3 means that you down sample the number of pixels by a factor of 3. Obviously, the larger this value is, the faster the calculation, but care is required to make sure that you do not miss important information (we offer no guarantees, only use this if you are confident that it is producing sensible output). `Remove_downloaded_images` allows you to delete all the downloaded magnetograms. Copies of these files (in a different format) are created, so the information in these files is not lost.
 
 Once you have selected values for all the variables in `read_data.txt`, you can run the code by
 typing:
