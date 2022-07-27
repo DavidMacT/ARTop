@@ -355,18 +355,18 @@ class NOAAreport:
                             continue
                         else:
                             daframe['Event'].append(df[0][i][:4])
-                        if (df[0][i][11:15]=='////'):
+                        if not (df[0][i][11:15].isnumeric()):
                             daframe['Begin'].append( str(np.nan))
                         else:
                             daframe['Begin'].append(   str(int(df[0][i][11:13])+c) + df[0][i][13:15])
-                        if (df[0][i][18:22]=='////'):
+                        if not (df[0][i][18:22].isnumeric()):
                             daframe['Max'].append( str(np.nan))
                         else:
-                            daframe['Max'].append(  str(int(df[0][i][18:20]) +c) +df[0][i][20:22])
-                        if (df[0][i][28:32]=='////'):
+                            daframe['Max'].append(  str(int(df[0][i][18:20])+c) +df[0][i][20:22])
+                        if not (df[0][i][28:32].isnumeric()):
                             daframe['End'].append( str(np.nan))
                         else:
-                            daframe['End'].append( str(int(df[0][i][28:30]) + c) + df[0][i][30:31])
+                            daframe['End'].append( str(int(df[0][i][28:30])+c) + df[0][i][30:31])
                         daframe['Type'].append(df[0][i][43:46])
                         daframe['Loc/Frq'].append(df[0][i][48:55])
                         daframe['Particulars'].append(df[0][i][58:62])
