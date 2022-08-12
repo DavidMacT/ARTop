@@ -256,6 +256,14 @@ details. In this example, a list of the maximum of GOES X-ray peaks has been sel
 time span. In the `TS.plot` command above, these times are included with `oplot=XR`. By exploring the
 NOAA reports and modifying the above code, you can also plot other available data.
 
+If you are woking on many active regions and are not able to store all of the downloaded magnetograms, you can store the raw data of the time series using the command
+
+```
+TS.save_raw(time,L,'winding')
+```
+which creates a file with `time` in the first column (this can be the variable from `TS.integrate_accum`, or it can be one that you create yourself) and the variable of choice (`L` in the above example) in the second column. The file is stored in `generated_images` and the format of the file name is the active region number followed by the name you give (`winding` in the above example).
+
+
 
 NOAA reports
 ------------
