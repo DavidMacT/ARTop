@@ -283,7 +283,7 @@ class timeseries:
         etime= datetime.datetime(int(self.et[:4]),int(self.et[4:6]),int(self.et[6:8]),int(self.et[9:11]))
 
         tlength = (etime - stime).total_seconds()
-        print('tlength = ', (tlength*5/3600))
+        print('tlength = ', (tlength/3600))
         # accumulation trapzoid
         integrated=[]
         st_time = 0
@@ -295,9 +295,19 @@ class timeseries:
             y_left = data[:i-1]                          # left endpoints
             integrated.append( (dt/2) * np.sum(y_right + y_left) )   
         
-        t_range = np.linspace(st_time,(len(data)*dt),len(integrated))     # N+1 points make N subintervals
+        t_range = np.linspace(st_time,((len(data)-1)*dt),len(integrated)) 
     
-        return np.array(integrated), t_range   
+        return np.array(integrated), t_range
+    
+    def save_raw(self,time,var,name):
+        dt = 720   
+        if len(var) == len(time):
+            file = open(str(self.path)[:-5] + '/generated_images/' + str(self.regionName) + '_' + name  + '.txt','w')
+            for i in range(len(var)):
+                file.write(str(i*dt) + ' ' + str(var[i]) + '\n')
+            file.close()
+        else:
+            print("The two variables are of different lengths. Perhaps you have input the wrong timespan?\n")
 
     def mean_std(self,Z, n_points, factor = 3):
         mean = []
@@ -316,6 +326,7 @@ class timeseries:
             std.append(std[-1])
     
         return np.array(mean), np.array(mean) + factor*np.array(std)
+    
     def arrange(self,lst):
         labl = [l[2] for l in lst]
         colr = [l[1] for l in lst]
