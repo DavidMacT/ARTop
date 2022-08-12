@@ -295,7 +295,7 @@ class timeseries:
             y_left = data[:i-1]                          # left endpoints
             integrated.append( (dt/2) * np.sum(y_right + y_left) )   
         
-        t_range = np.linspace(st_time,((len(data)-1)*dt),len(integrated)) 
+        t_range = np.linspace(st_time,((len(data)-1)*dt),(len(integrated)+1)) 
     
         return np.array(integrated), t_range
     
