@@ -304,7 +304,7 @@ class timeseries:
         if len(var) == len(time):
             file = open(str(self.path)[:-5] + '/generated_images/' + str(self.regionName) + '_' + name  + '.txt','w')
             for i in range(len(var)):
-                file.write(str(i*dt) + ' ' + str(var[i]) + '\n')
+                file.write(str(time[i]) + ' ' + str(var[i]) + '\n')
             file.close()
         else:
             print("The two variables are of different lengths. Perhaps you have input the wrong timespan?\n")
