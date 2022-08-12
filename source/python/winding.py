@@ -290,12 +290,12 @@ class timeseries:
         data=[]
         dt = 720
         data = list(self.read_data(Vrbs))
-        for i in range(1,len(data)):    
+        for i in range(1,(len(data)+1)):    
             y_right = data[1:i]                          # right endpoints
             y_left = data[:i-1]                          # left endpoints
             integrated.append( (dt/2) * np.sum(y_right + y_left) )   
         
-        t_range = np.linspace(st_time,((len(data)-1)*dt),(len(integrated)+1)) 
+        t_range = np.linspace(st_time,((len(data)-1)*dt),len(integrated)) 
     
         return np.array(integrated), t_range
     
