@@ -302,10 +302,9 @@ class timeseries:
     def save_raw(self,time,var,name):
         dt = 720   
         if len(var) == len(time):
-            file = open(str(self.path)[:-5] + '/generated_images/' + str(self.regionName) + '_' + name  + '.txt','w')
-            for i in range(len(var)):
-                file.write(str(time[i]) + ' ' + str(var[i]) + '\n')
-            file.close()
+            data = np.column_stack([time, var])
+            file_path = str(self.path)[:-5] + '/generated_images/' + str(self.regionName) + '_' + name  + '.txt'
+            np.savetxt(file_path , data)
         else:
             print("The two variables are of different lengths. Perhaps you have input the wrong timespan?\n")
 
