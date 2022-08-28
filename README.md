@@ -14,7 +14,7 @@ Requirements
 
 
 The code runs on Linux and requires Python 3, a C++ compiler and OpenMP.
-Several of the analysis routines make use of SunPy (https://sunpy.org/) and, following their example,
+{\bf SDO analysis routines make use of SunPy (https://sunpy.org/)} and, following their example,
 we recommend that Python (and its necessary packages) be installed via Miniconda 3.
 
 
