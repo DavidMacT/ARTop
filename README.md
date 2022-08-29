@@ -47,15 +47,15 @@ Remove_downloaded_images=false,
 
 `Region number` corresponds to the SHARP number of the active region and not the NOAA number. 
 
-`Download data` is a binary variable. Setting this to `false` <b>`(not in uppercase)`</b> means that, if you have already downloaded the magnetogram, you can run the code without having to download them again. 
+`Download data` is a binary variable. Setting this to `false` (not in uppercase) means that, if you have already downloaded the magnetogram, you can run the code without having to download them again. 
 
-The time/<b>`date`</b> variables are self explanitory (always use two digits, e.g. 09, not 9). 
+The time/date variables are self explanitory (always use two digits, e.g. 09, not 9). 
 
 `Velocity smoothing` corresponds to how the window size used in the DAVE4VM code. 
 
 The directory variables require the full paths in order to work properly, e.g. `/home/folder/input_folder` and not just `input_folder`. 
 
-`Topology` means that you want to run the topological calculations (which are performed via a C++ code). <b>`(not in uppercase)`</b>
+`Topology` means that you want to run the topological calculations (which are performed via a C++ code). (not in uppercase)
 
 `Cutoff` is the minimum magnetic field strength that you wish to consider for the topological calculations. This value is measures in Gauss.
 
@@ -214,7 +214,7 @@ These quantities are calculated using
 mean, mstd = TS.mean_std(dLdt,n_points = 2,factor = 3)
 ```
 
-`n_points` is the number of previous time steps used to create the running mean <b>`(mean window)`</b>. `factor` determines
+`n_points` is the number of previous time steps used to create the running mean. `factor` determines
 the number of standard deviations used for the envelope. Now you can combine the variables for
 plotting
 
