@@ -145,7 +145,7 @@ from observation import NOAAreport as noaa
 
 ```
 
-<b>`If you have changed the directory of the `run.py`, you would need to adjust the directory of the source file in the `sys.path` line.`</b>
+If you have changed the directory of the `run.py`, you will need to adjust the directory of the source file in the `sys.path` line.
 
 It is important to specify the SHARP number of the active region, such as
 
@@ -294,7 +294,7 @@ Loc/Frq
 Particulars
 Reg
 ```
-For flares, `Type` = `FLA` <b>and for x-ray `Type`=</b> `XRA`. For the latter, `Particulars` gives the GOES classification. `Begin`, 
+For flares, `Type` = `FLA` and for X-ray, `Type`= `XRA`. For the latter, `Particulars` gives the GOES classification. `Begin`, 
 `Max` and `End` correspond to the beginning, maximum and end of the flare. `Reg` is the active region number.
 `report` contains too much information, but it is simple to extract key flare data. For example, if you wish
 to find the maxima of the X-ray peaks during the specified timespan for a particular active region, you just
@@ -369,7 +369,7 @@ The code has been desgined to process one active region at a time. This is becau
 for the calculations and this way users can run the code easily on a laptop. If you have the resources, however,
 you can run the code in batch mode and perform the calculations for several active regions in paralel. To do this,
 first create a folder called `batch_info`. Inside this, create files `read_data_x.txt`, in which each file contains 
-all the details from `read_data.txt` and `x` is a number to be looped through<b>`, e.g if you are running two active regions, the files should be numbered as read_data_1.txt and read_data_2.txt`</b>. Every `read_data_x.txt` can represent 
+all the details from `read_data.txt` and `x` is a number to be looped through, e.g if you are running two active regions, the files should be numbered as read_data_1.txt and read_data_2.txt. Every `read_data_x.txt` can represent 
 a different active region.` 
 
 In `batch_run.sh`, change `number_of_files` to the number of files you created in `batch_info`. In `run_ARTop.sh`, 
@@ -382,7 +382,7 @@ comment out the line below `for a single active region` and uncomment the block 
 
 ---------------
 
-There is also the possibiilty <b>`to plot SDO maps and to download/plot GOES data directly and overplot with the time series data. Examples are given
+There is also the possibiilty to plot SDO maps and to download/plot GOES data directly and overplot with the time series data. Examples are given
 in `run.py`. These are modifications of sunpy routines. Documentation for these can be found on the
 sunpy webpage. More details of these may appear in the near future...
 
