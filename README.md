@@ -1,22 +1,21 @@
 
-Active Region Topology (ARTop) - a tool for studying topological quantities in solar active regions
+Active Region Topology (ARTop) - a framework for studying topological quantities in solar active regions
 ---------------------------------------------------------------------------------------------------
 
-<b>This framework</b>
-/This code/ is for calculating and analysing photospheric topological
+This framework is for calculating and analysing photospheric topological
 signatures of solar active regions. The code downloads SHARP magnetograms
 and uses these to calculate maps and time series of quantities including
 magnetic helicity and magnetic winding fluxes. Analysis routines allow for
 the straightforward production of figures and allow for the detailed
-comparison of time series to flare times. 
-<b> The framework is desiged to give flixabilty to the user for downloading, processing, and visualizing the data at different directories.</b>
+comparison of time series to flare times. The framework is desiged to give 
+flexibilty to the user for downloading, processing, and visualizing the data.
 
 Requirements
 ------------
 
 
 The code runs on Linux and requires Python 3, a C++ compiler and OpenMP.
-<b>`SDO (solar dynamic observatory) data`</b> analysis routines make use of SunPy (https://sunpy.org/) and, following their example,
+SDO (Solar Dynamics Observatory) data analysis routines make use of SunPy (https://sunpy.org/) and, following their example,
 we recommend that Python (and its necessary packages) be installed via Miniconda 3.
 
 
