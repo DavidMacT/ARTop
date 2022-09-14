@@ -384,6 +384,8 @@ Read in the files
    double totHel =0.0;
    double deltaLflux = 0.0;
    double deltaHflux = 0.0;
+   double temp1 = 0.0;
+   double temp2 = 0.0;
    for(int i=0;i<windingDat.size();i++){
      std::vector<double> windvals = windingDat[i];
      // the minus 1 is part of the formula.
@@ -401,9 +403,11 @@ Read in the files
      totHelPot=totHelPot+helvalPot;
      totWindVel=totWindVel+windvalVelOnly;
      totHelVel=totHelVel+helvalVelOnly;
-     deltaLflux=deltaLflux+(std::abs(windvalCur)-std::abs(windvalPot));
-     deltaHflux=deltaHflux+(std::abs(helvalCur)-std::abs(helvalPot));
-     outfile<<windvals[0]<<" "<<windvals[1]<<" "<<windvals[2]<<" "<<windvals[3]<<" "<<windvals[4]<<" "<<windvalCur<<" "<<helvalCur<<" "<<windvalPot<<" "<<helvalPot<<" "<<windvalVelOnly<<" "<<helvalVelOnly<<" "<<wind<<" "<<hel<<" "<<deltaLflux<<" "<<deltaHflux<<"\n";
+     temp1 = std::abs(windvalCur)-std::abs(windvalPot);
+     temp2 = std::abs(helvalCur)-std::abs(helvalPot);
+     deltaLflux=deltaLflux+temp1;
+     deltaHflux=deltaHflux+temp2;
+     outfile<<windvals[0]<<" "<<windvals[1]<<" "<<windvals[2]<<" "<<windvals[3]<<" "<<windvals[4]<<" "<<windvalCur<<" "<<helvalCur<<" "<<windvalPot<<" "<<helvalPot<<" "<<windvalVelOnly<<" "<<helvalVelOnly<<" "<<wind<<" "<<hel<<" "<<temp1<<" "<<temp2<<"\n";
    }
    // don't forget to upscale to account for missing values
    outfile<<totWindCur*dx*dy*((nx*ny)/windingDat.size())<<"\n";
