@@ -371,7 +371,7 @@ class timeseries:
                 t = data[p][0]           
                 for l in range(len(t)):
                     if (l == (len(t)-1)):
-                        plt.plot(((t[l]/u[0]),(t[l]/u[0])), (min(Y[0][:len(X)]),max(Y[0][:len(X)])), data[p][1] , label= p + ' x-ray' )
+                        plt.plot(((t[l]/u[0]),(t[l]/u[0])), (min(Y[0][:len(X)]),max(Y[0][:len(X)])), data[p][1] , label= p)
                     else:
                         plt.plot(((t[l]/u[0]),(t[l]/u[0])), (min(Y[0][:len(X)]),max(Y[0][:len(X)])), data[p][1] )
         plt.ylabel(ylabel)
@@ -379,7 +379,7 @@ class timeseries:
         plt.ylim([min(Y[0][:len(X)]), max(Y[0][:len(X)])])
         plt.xlim([(X[0]/u[0]), (X[-1]/u[0])])
 #        plt.legend()
-        plt.legend(loc=0, bbox_to_anchor=(1, 0.5), fontsize = 'x-small')
+        plt.legend(loc=0, bbox_to_anchor=(1, 1), fontsize = 'x-small')
 
     
         if save is True:
