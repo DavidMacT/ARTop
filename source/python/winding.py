@@ -151,15 +151,32 @@ class mapping:
         return variable        
    
          
+#    def plot_limit(self, Variable_):
+#        V=[]
+#        for i in np.array(Variable_).T:
+#            V.append(i)
+#        mx = np.max(V)
+#        mn = np.min(V)
+#    
+#        return (mn, mx) 
+
     def plot_limit(self, Variable_):
-        V=[]
-        for i in np.array(Variable_).T:
-            V.append(i)
+        V =np.array(Variable_).T
+        V = V.flatten()
         mx = np.max(V)
         mn = np.min(V)
-    
-        return (mn, mx) 
-    
+
+       
+        if abs(mx)>abs(mn):
+            subV =V[V>0]
+            mx =np.quantile(subV, 1.0)
+            mn=-mx
+        else:
+            subV = V[V<0]
+            mn =np.quantile(subV, 0.0)
+            mx=-mn
+       
+        return (mn, mx)
            
     def plotmap(self,Z, title,save=False, variable_name=None):
         if Z is None:
@@ -167,9 +184,18 @@ class mapping:
         else:
             nx, ny = self.getnxny()
             km_factor = 360
+            sizeRatio = ny/nx
             ny = np.linspace(0, ny*km_factor,len(Z))
             nx = np.linspace(0, nx*km_factor,len(Z[0]))
             X,Y = np.meshgrid(nx,ny)
+            
+            color = 'Greys_r'
+            if (variable_name=='windvalCur' or variable_name=='windvalPot' or variable_name=='windvalBraidOnly' or  variable_name=='wind' or variable_name=='windvalCur'  or variable_name=='deltaLflux'):
+                color ="RdBu_r"
+            elif (variable_name=='helvalCur' or variable_name=='helvalPot' or variable_name=='helvalBraidOnly' or  variable_name=='hel' or variable_name=='helvalCur'  or variable_name=='deltaHflux'):
+                color = "PRGn"
+            elif (variable_name== 'vz' or variable_name=='sz'):
+                color ="cool"
         
             co_rang_st = self.plot_limit(Z)[0]
             co_rang_ed = self.plot_limit(Z)[1]
@@ -177,8 +203,8 @@ class mapping:
             v = np.linspace(co_rang_st, co_rang_ed, 60, endpoint=True)
         
             plt.rcParams.update({'font.size':16})
-            plt.figure(figsize=(12, 10))
-            plt.contourf(X,Y,Z,v,cmap='Greys_r')
+            plt.figure(figsize=(15, 15*sizeRatio))
+            plt.contourf(X,Y,Z,v,cmap=color)
             plt.ticklabel_format(axis="both", style="sci", scilimits=(0,0))
             plt.clim(co_rang_st , co_rang_ed)
         
