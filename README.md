@@ -45,7 +45,7 @@ Remove_downloaded_images=false,
 
 ```
 
-`Region number` corresponds to the SHARP number of the active region and not the NOAA number. 
+`Region number` corresponds to the SHARP number of the active region and not the NOAA number. If you only know the NOAA number for a region and not the SHARP number, you can use the script `noaa_sharp.py` to find the SHARP number.
 
 `Download data` is a binary variable. Setting this to `false` (not in uppercase) means that, if you have already downloaded the magnetogram, you can run the code without having to download them again. 
 
