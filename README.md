@@ -9,10 +9,13 @@ ARTop allows you to calculate and analyse topological signatures of solar active
 Installation
 ------------
 
+ARTop is designed to run on Linux and has the following dependencies: a C++ compiler, OpenMP, Python 3, SunPy (https://sunpy.org/), LAPACK (http://www.netlib.org/lapack/) and BLAS (http://www.netlib.org/blas/).
 
-The code runs on Linux and requires Python 3, a C++ compiler and OpenMP.
-SDO (Solar Dynamics Observatory) data analysis routines make use of SunPy (https://sunpy.org/) and, following their example,
-we recommend that Python (and its necessary packages) be installed via Miniconda 3.
+For users who do not have Python installed currently on their machines, we recommend installation via Miniconda 3 (https://docs.conda.io/).
+
+The installation of LAPACK and BLAS requires some extra steps which we now outline.
+
+
 
 
 Running the code
