@@ -11,6 +11,8 @@ Installation
 
 ARTop is designed to run on Linux and has the following dependencies: a C++ compiler, OpenMP, Python 3, SunPy (https://sunpy.org/), LAPACK (http://www.netlib.org/lapack/) and BLAS (http://www.netlib.org/blas/).
 
+In developing ARTop, we have used GNU compilers (https://gcc.gnu.org/).
+
 For users who do not have Python installed currently on their machines, we recommend installation via Miniconda 3 (https://docs.conda.io/).
 
 The installation of LAPACK and BLAS requires some extra steps which we now outline.
@@ -21,7 +23,25 @@ In the BLAS folder type:
 
 After that, type:
 
-'mv blas_UNIX.a libblas.a'
+`mv blas_LINUX.a libblas.a`
+
+to create a library called `libblas.a`. Now copy this to your library folder:
+
+`sudo cp libblas /usr/local/lib`
+
+Now go to the LAPACK folder and, if necessary, type:
+
+`mv make.inc.example make.inc`
+
+Then type:
+
+`make`
+
+Now copy this to your library folder:
+
+`sudo cp liblapack.a /usr/local/lib`
+
+ARTop's makefile is configured to read these libraries in this folder. If you wish to save them elsewhere, you will need to edit the path in the makefile.
 
 
 Running the code
