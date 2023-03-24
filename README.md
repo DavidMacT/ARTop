@@ -15,6 +15,10 @@ For users who do not have Python installed currently on their machines, we recom
 
 The installation of LAPACK and BLAS requires some extra steps which we now outline.
 
+In the BLAS folder type
+
+`make`
+
 
 
 
