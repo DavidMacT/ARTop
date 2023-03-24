@@ -145,3 +145,5 @@ There are also variables for creating time series:
 ```
 
 These variables are actually time derivatives but it is straightforward to produce their accummulations integrated in time. 
+
+The output files containing these variables are located in the Data folder of the output directory. 
