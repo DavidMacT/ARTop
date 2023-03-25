@@ -29,7 +29,7 @@ After that, type:
 
 to create a library called `libblas.a`. Now copy this to your library folder:
 
-`sudo cp libblas /usr/local/lib`
+`sudo cp libblas.a /usr/local/lib`
 
 Now go to the LAPACK folder and, if necessary, type:
 
@@ -59,23 +59,23 @@ which will compile the C++ part of the code.
 The next file to consider is `read_data.txt`. This is the only file that needs to edited in order to run ARTop. Open `read_data.txt' to see a list like:
 
 ```
-Region number=7115,
-Download_data=true,
-Start year=2017,
-Start month=08,
-Start day=28,
-Start hour=09,
-End year=2017,
-End month=08,
-End day=28,
-End hour=10,
-Velocity smoothing=20,
-Input directory=/home/your_directory/input,
-Output directory=/home/your_directory/output,
-Topology=true,
-Cutoff=50,
-Sampling=1,
-Remove_downloaded_images=false,
+Region number=7115
+Download_data=true
+Start year=2017
+Start month=08
+Start day=28
+Start hour=09
+End year=2017
+End month=08
+End day=28
+End hour=10
+Velocity smoothing=20
+Input directory=/home/your_directory/input
+Output directory=/home/your_directory/output
+Topology=true
+Cutoff=50
+Sampling=1
+Remove_downloaded_images=false
 Registered email=mocenigo@palazzo_ducale.it
 
 ```
