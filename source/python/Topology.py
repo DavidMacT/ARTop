@@ -141,4 +141,11 @@ for i in range(int(nt)):
 f1.close()
 
 # End of topology calculations
-    
+
+# Check if files from the input directory are to be removed
+if removeImages.casefold() == 'true':
+    allFiles = os.path.join(inputDir,'*')
+    fileList = glob.glob(allFiles)
+    for f in fileList:
+        print('Deleting :'+f)
+        os.remove(f)
