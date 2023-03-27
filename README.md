@@ -79,7 +79,7 @@ Cutoff=50
 Sampling=1
 Remove_downloaded_images=false
 Registered email=mocenigo@palazzo_ducale.it
-
+Keep tar gile=true
 ```
 
 `Region number` corresponds to the SHARP number of the active region and not the NOAA number. If you only know the NOAA number for a region and not the SHARP number, you can use the script `source/python/noaa_sharp.py` to find the SHARP number.
@@ -98,9 +98,11 @@ The directory variables require the FULL PATHS in order to work properly, e.g. `
 
 `Sampling` determines the resolution at which you perform the topological calculations. A value of 1 means that you include all the pixels in the calculation. A value of 3 means that you down sample the number of pixels by a factor of 3.
 
-`Remove_downloaded_images` allows you to delete all the downloaded magnetograms. Copies of these files (in a different format) are created, so the information in these files is not lost.
+`Remove downloaded images` allows you to delete all the downloaded magnetograms. Copies of these files (in a different format) are created, so the information in these files is not lost.
 
 `Registered email` is required for downloading SHARP magnetograms from JSOC (http://jsoc.stanford.edu/). To register your email, see http://jsoc.stanford.edu/ajax/register_email.html. YOU MUST REGISTER YOUR EMAIL BEFORE YOU CAN RUN ARTop.
+
+`Keep tar file` The FITS files are downloaded in a tar file and then extracted. The code automatically deletes the FITS files after they have been processed, but setting this option to `True` will keep the tar file in the input directory. Setting it to `False` will delete the tar file and its associated files. The extracted FITS files are deleted for either option. 
 
 Once you have selected values for all the variables in `read_data.txt` and saved it, you can run the code by
 typing:
