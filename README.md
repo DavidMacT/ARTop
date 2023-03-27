@@ -62,7 +62,7 @@ The next file to consider is `read_data.txt`. This is the only file that needs t
 
 ```
 Region number=7115
-Download_data=true
+Download data=true
 Start year=2017
 Start month=08
 Start day=28
