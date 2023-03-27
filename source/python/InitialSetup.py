@@ -155,13 +155,6 @@ pathDAVE = os.path.join('.',cwd,'source','cpp','getVelocity')
 cmd = pathDAVE+gap+argDAVE
 subprocess.call(cmd,shell=True)
 
-# Check if remove files
-if removeImages.casefold() == 'true':
-    allFiles = os.path.join(inputDir,'*')
-    fileList = glob.glob(allFiles)
-    for f in fileList:
-        print('Deleting :'+f)
-        os.remove(f)
 
 # Call potential field solver
 numPot = str(nt)
