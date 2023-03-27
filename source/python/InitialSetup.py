@@ -58,7 +58,7 @@ def readData():
         contents = f.readlines()
 
     variables = []
-    n = 19 # number of variables in read_data.txt
+    n = 20 # number of variables in read_data.txt
     for i in range(n):
         temp = afterEquals(contents[i])
         variables.append(temp)
@@ -113,7 +113,7 @@ sampling = varAR[15]
 removeImages = varAR[16]
 regEmail = varAR[17]
 keepTar = varAR[18]
-
+manualDown = varAR[19]
 
 # Check input/output directories exist and, if not, create them
 
@@ -130,7 +130,7 @@ if os.path.exists(outputDir) == False:
 gap = ' '
 if downloadData.casefold() == 'true':
     # Download the magnetograms
-    argMD = regionNum+gap+startYear+gap+startMonth+gap+startDay+gap+startHour+gap+endYear+gap+endMonth+gap+endDay+gap+endHour+gap+inputDir+gap+outputDir+gap+regEmail+gap+downloadData+gap+velSmooth+gap+cutoff+gap+sampling+gap+keepTar
+    argMD = regionNum+gap+startYear+gap+startMonth+gap+startDay+gap+startHour+gap+endYear+gap+endMonth+gap+endDay+gap+endHour+gap+inputDir+gap+outputDir+gap+regEmail+gap+downloadData+gap+velSmooth+gap+cutoff+gap+sampling+gap+keepTar+gap+manualDown
     cwd = os.getcwd()
     pathMD = os.path.join(cwd,'source','python','MagDown.py')
     cmd = 'python'+gap+pathMD+gap+argMD
