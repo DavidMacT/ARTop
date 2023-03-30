@@ -126,7 +126,7 @@ if os.path.exists(outputDir) == False:
 # Check if download needed
 
 gap = ' '
-if downloadData.casefold() == 'true':
+if downloadData.casefold() == 'true' or downloadData.casefold() == 'manual':
     # Download the magnetograms
     argMD = regionNum+gap+startYear+gap+startMonth+gap+startDay+gap+startHour+gap+endYear+gap+endMonth+gap+endDay+gap+endHour+gap+inputDir+gap+outputDir+gap+regEmail+gap+downloadData+gap+velSmooth+gap+cutoff+gap+sampling
     cwd = os.getcwd()
