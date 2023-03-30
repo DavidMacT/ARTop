@@ -414,6 +414,34 @@ def readMap(outputDir,fileNum,varCode):
     scaleX = scaleX*float(sampling)
     scaleY = scaleY*float(sampling)
 
+    # Units
+    if varCode == 'bz':
+        un = u.gauss
+    elif varCode == 'vz':
+        un = u.km/u.s
+    elif varCode == 'sz':
+        un = u.gaus * u.gauss * u.km / u.s
+    elif varCode == 'windCur':
+        un = u.km * u.km / u.s
+    elif varCode == 'helCur':
+        un = u.gauss * u.gauss * u.km * u.km / u.s
+    elif varCode == 'windPot':
+        un = u.km * u.km / u.s
+    elif varCode == 'helPot':
+        un = u.gauss * u.gauss * u.km * u.km / u.s
+    elif varCode == 'windBraid':
+        un = u.km * u.km / u.s
+    elif varCode == 'helBraid':
+        un = u.gauss * u.gauss * u.km * u.km / u.s
+    elif varCode == 'wind':
+        un = u.km * u.km / u.s
+    elif varCode == 'hel':
+        un = u.gauss * u.gauss * u.km * u.km / u.s
+    elif varCode == 'deltaLf':
+        un = u.km * u.km / u.s
+    else:
+        un = u.gauss * u.gauss * u.km * u.km / u.s
+    
     # Build header
     coord = SkyCoord(rcx*u.deg, rcy*u.deg, 695700000*u.m, obstime=obsTime, observer='self', frame='heliographic_carrington')
         
