@@ -92,17 +92,15 @@ The time/date variables are self explanitory (always use two digits, e.g. 09, no
 
 The directory variables require the FULL PATHS in order to work properly, e.g. `/home/folder/input_folder` and not just `input_folder`. 
 
-`Topology` means that you want to run the topological calculations (not in uppercase).
+`Topology` means that you want to run the topological calculations.
 
 `Cutoff` is the minimum magnetic field strength that you wish to consider for the topological calculations. This value is measures in Gauss.
 
 `Sampling` determines the resolution at which you perform the topological calculations. A value of 1 means that you include all the pixels in the calculation. A value of 3 means that you down sample the number of pixels by a factor of 3.
 
-`Remove downloaded images` allows you to delete all the downloaded magnetograms. Copies of these files (in a different format) are created, so the information in these files is not lost.
+`Remove downloaded images` allows you to delete all the files in the input folder.
 
 `Registered email` is required for downloading SHARP magnetograms from JSOC (http://jsoc.stanford.edu/). To register your email, see http://jsoc.stanford.edu/ajax/register_email.html. YOU MUST REGISTER YOUR EMAIL BEFORE YOU CAN RUN ARTop.
-
-`Keep tar file` The FITS files are downloaded in a tar file and then extracted. The code automatically deletes the FITS files after they have been processed, but setting this option to `True` will keep the tar file in the input directory. Setting it to `False` will delete the tar file and its associated files. The extracted FITS files are deleted for either option. 
 
 Once you have selected values for all the variables in `read_data.txt` and saved it, you can run the code by
 typing:
