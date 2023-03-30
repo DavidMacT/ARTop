@@ -79,12 +79,12 @@ Cutoff=50
 Sampling=1
 Remove_downloaded_images=false
 Registered email=mocenigo@palazzo_ducale.it
-Keep tar gile=true
+
 ```
 
 `Region number` corresponds to the SHARP number of the active region and not the NOAA number. If you only know the NOAA number for a region and not the SHARP number, you can use the script `source/python/noaa_sharp.py` to find the SHARP number.
 
-`Download data` is a binary variable. Setting this to `false` (not in uppercase) means that, if you have already downloaded the magnetograms, you can run the code without having to download them again. 
+`Download data` has three settings: `true` means that the code will automatically download the data and create the necessary input and parameter files; `false` assumes that the necessary input and parameter files already exist (e.g. from a previous run); `manual` assumes that the user has placed a tar file (containing the FITS files to be read) in the input folder. The code will then process this file to produce the necessary input and parameter files. This last option is for users with slow connection speeds. 
 
 The time/date variables are self explanitory (always use two digits, e.g. 09, not 9). 
 
@@ -142,8 +142,8 @@ There are also variables for creating time series:
 'totHelCur':            total current-carrying helcity 
 'totHelPot':            total potential helicity
 'totHelBraid':         	total braiding helicity 
-'totWind':  	        total winding
-'totHel':   	        total helicity
+'totWind':  	          total winding
+'totHel':   	          total helicity
 'deltaLflux':           delta winding flux
 'deltaHflux':           delta helicity flux
 ```
