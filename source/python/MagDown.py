@@ -39,8 +39,6 @@ The inputs to this script are:
 13. velSmooth
 14. cutoff
 15. Sampling
-16. keepTar
-17. manualDown
 '''
 
 # Inputs
@@ -60,8 +58,6 @@ downloadData = sys.argv[13]
 velSmooth = sys.argv[14]
 cutoff = sys.argv[15]
 sampling = sys.argv[16]
-keepTar = sys.argv[17]
-manualDown = sys.argv[18]
 
 startTime = startYear+'-'+startMonth+'-'+startDay+'T'+startHour+':00:00'
 endTime = endYear+'-'+endMonth+'-'+endDay+'T'+endHour+':12:00'
@@ -240,7 +236,7 @@ Main code:
     
                 
 # Download tar file and extract FITS files
-if manualDown.casefold() == 'false':
+if downloadData.casefold() == 'true':
     downloadMag(startTime,endTime,inputDir,regionNum,regEmail)
 
 # Extract tar file to get FITS files
