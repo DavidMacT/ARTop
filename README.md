@@ -142,8 +142,8 @@ There are also variables for creating time series:
 'totHelCur':            total current-carrying helcity 
 'totHelPot':            total potential helicity
 'totHelBraid':         	total braiding helicity 
-'totWind':  	          total winding
-'totHel':   	          total helicity
+'totWind':              total winding
+'totHel':               total helicity
 'deltaLflux':           delta winding flux
 'deltaHflux':           delta helicity flux
 ```
