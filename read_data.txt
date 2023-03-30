@@ -16,5 +16,3 @@ Cutoff=
 Sampling=
 Remove downloaded images=
 Registered email=
-Keep tar file=
-Manual download=
