@@ -337,12 +337,6 @@ for i in range(nt+1):
             writeInitialData = False
 
 
-# Check if tar file is to be kept
-if keepTar.casefold() == 'false':
-    listDir = os.listdir(inputDir)
-    for item in listDir:
-        if item.startswith('JSOC') or item.startswith('index'):
-            os.remove(os.path.join(inputDir, item))
         
             
 # Remove the FITS files
