@@ -27,5 +27,5 @@ source/cpp/.cpp.o:
 	$(CXX) $(CXXFLAGS) $< -o $@ 
 
 clean:
-	$(RM) $(OBJS2) $(OBJS1)
+	$(RM) $(OBJS2) $(OBJS1) $(TARGET_EXEC1) $(TARGET_EXEC2)
 
