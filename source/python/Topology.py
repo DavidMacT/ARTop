@@ -147,5 +147,4 @@ if removeImages.casefold() == 'true':
     allFiles = os.path.join(inputDir,'*')
     fileList = glob.glob(allFiles)
     for f in fileList:
-        print('Deleting :'+f)
         os.remove(f)
