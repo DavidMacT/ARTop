@@ -12,8 +12,6 @@ CXXFLAGS = -O3 -std=gnu++14 -fopenmp
 RM = rm -f
 LDFLAGS1 =  -L/usr/local/lib -llapack -lblas -lgfortran
 
-#.PHONY: clean
-#clean: $(RM) source/cpp/*.o $(TARGET_EXEC1) $(TARGET_EXEC2)
 
 all: $(TARGET_EXEC1) $(TARGET_EXEC2)
 
