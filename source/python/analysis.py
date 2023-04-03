@@ -445,7 +445,7 @@ def readMap(outputDir,fileNum,varCode):
     # Build header
     coord = SkyCoord(rcx*u.deg, rcy*u.deg, 695700000*u.m, obstime=obsTime, observer='self', frame='heliographic_carrington')
         
-    header = make_fitswcs_header(Z,coord,reference_pixel=u.Quantity(([rpx,rpy])*u.pixel), scale=u.Quantity(([scaleX,scaleY])*u.deg/u.pixel), telescope='SDO', instrument = 'HMI SIDE1')
+    header = make_fitswcs_header(Z,coord,reference_pixel=u.Quantity(([rpx,rpy])*u.pixel), scale=u.Quantity(([scaleX,scaleY])*u.deg/u.pixel), telescope='SDO', instrument = 'HMI SIDE1',unit=un)
     
     # Build map
     mapOut = sunpy.map.Map(Z,header)
