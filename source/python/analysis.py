@@ -90,10 +90,10 @@ def readSeries(outputDir):
     
     # create variable arrays
     windCur   = np.zeros(nt)
-    windPot   = np.zeros(nt)
-    windBraid = np.zeros(nt)
     helCur    = np.zeros(nt)
+    windPot   = np.zeros(nt)
     helPot    = np.zeros(nt)
+    windBraid = np.zeros(nt)
     helBraid  = np.zeros(nt)
     wind      = np.zeros(nt)
     hel       = np.zeros(nt)
@@ -103,10 +103,10 @@ def readSeries(outputDir):
     n = 10
     for i in range(nt):
         windCur[i]   = list[n*i]
-        windPot[i]   = list[n*i+1]
-        windBraid[i] = list[n*i+2]
-        helCur[i]    = list[n*i+3]
-        helPot[i]    = list[n*i+4]
+        helCur[i]    = list[n*i+1]
+        windPot[i]   = list[n*i+2]
+        helPot[i]    = list[n*i+3]
+        windBraid[i] = list[n*i+4]
         helBraid[i]  = list[n*i+5]
         wind[i]      = list[n*i+6]
         hel[i]       = list[n*i+7]
@@ -114,10 +114,10 @@ def readSeries(outputDir):
         dH[i]        = list[n*i+9]
 
     data = {'windCur'   : windCur,
-            'windPot'   : windPot,
-            'windBraid' : windBraid,
             'helCur'    : helCur,
+            'windPot'   : windPot,
             'helPot'    : helPot,
+            'windBraid' : windBraid,
             'helBraid'  : helBraid,
             'wind'      : wind,
             'hel'       : hel,
@@ -146,10 +146,10 @@ def running_mean_std(df,offset,nsigma):
     '''
     times     = df['times(seconds)'].to_numpy()
     windCur   = df['windCur'].to_numpy()
-    windPot   = df['windPot'].to_numpy()
-    windBraid = df['windBraid'].to_numpy()
     helCur    = df['helCur'].to_numpy()
+    windPot   = df['windPot'].to_numpy()
     helPot    = df['helPot'].to_numpy()
+    windBraid = df['windBraid'].to_numpy()
     helBraid  = df['helBraid'].to_numpy()
     wind      = df['wind'].to_numpy()
     hel       = df['hel'].to_numpy()
@@ -228,10 +228,10 @@ def running_mean_std(df,offset,nsigma):
 
     data = {'times(seconds)': times,
             'windCur_ms'    : windCur_ms,
-            'windPot_ms'    : windPot_ms,
-            'windBraid_ms'  : windBraid_ms,
             'helCur_ms'     : helCur_ms,
+            'windPot_ms'    : windPot_ms,
             'helPot_ms'     : helPot_ms,
+            'windBraid_ms'  : windBraid_ms,
             'helBraid_ms'   : helBraid_ms,
             'wind_ms'       : wind_ms,
             'hel_ms'        : hel_ms,
@@ -294,10 +294,10 @@ def integrate_series(df):
 
     data = {'times(seconds)': times,
             'windCur_int'   : windCur_int,
-            'windPot_int'   : windPot_int,
-            'windBraid_int' : windBraid_int,
             'helCur_int'    : helCur_int,
+            'windPot_int'   : windPot_int,
             'helPot_int'    : helPot_int,
+            'windBraid_int' : windBraid_int,
             'helBraid_int'  : helBraid_int,
             'wind_int'      : wind_int,
             'hel_int'       : hel_int,
