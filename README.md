@@ -90,7 +90,7 @@ Registered email=mocenigo@palazzo_ducale.it
 
 `false` assumes that the necessary input and parameter files already exist (e.g. from a previous run). 
 
-`manual` assumes that the user has placed a tar file (containing the FITS files to be read) in the input folder. The code will then process this file to produce the necessary input and parameter files. This last option is for users with slow connection speeds. 
+`manual` assumes that the user has placed a tar file (containing the FITS files to be read) in the input folder. The code will then process this file to produce the necessary input and parameter files. This last option is for users with slow connection speeds. For more details on downloadin tar files from the JSOC website, please cosult http://jsoc.stanford.edu/How_toget_data.html.
 
 The time/date variables are self explanitory (always use two digits, e.g. 09, not 9). 
 
