@@ -45,7 +45,7 @@ std::vector<double> biotSavartGauge::getWindingObsPotFast(int &xi,int &xj,std::v
   for(int i=0;i<nx;i=i+downsampleFAC){
     for(int j=0;j<ny;j=j+downsampleFAC){
       nosample++;
-      // handle the x=y case, currently just set its denisty to zero [hmmm];
+      // handle the x=y case
       if(i != xi && j != xj){
       	y1 = leftx + i*dx;
        	y2 = lefty + j*dy;
