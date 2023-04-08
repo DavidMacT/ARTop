@@ -41,8 +41,6 @@ std::vector<double> biotSavartGauge::getWindingObsPotFast(int &xi,int &xj,std::v
   }else{
     sigma1=0.0;
   }
-  //std::cout<<"co is "<<magCutOff<<"\n";
-  //std::cout<<"in  here "<<nx<<" "<<ny<<" break\n";
   int nosample =0;
   for(int i=0;i<nx;i=i+downsampleFAC){
     for(int j=0;j<ny;j=j+downsampleFAC){
@@ -55,7 +53,6 @@ std::vector<double> biotSavartGauge::getWindingObsPotFast(int &xi,int &xj,std::v
 	//std::cout<<i<<" "<<j<<" "<<bfield[i][j].getZ()<<" "<<bmagY<<" "<<bmagX<<" "<<magCutOff<<"\n";
 	if(bmagY>magCutOff && bmagX>magCutOff){
 	  rsq = (y1-x1)*(y1-x1)+ (y2-x2)*(y2-x2);
-	  //std::cout<<rsq<<"\n";
 	  if(rsq>0.000000000001){
 	    denomCur =(vecFCur[i][j].getY()-vecFCur[xi][xj].getY())*(y1-x1) -(vecFCur[i][j].getX()-vecFCur[xi][xj].getX())*(y2-x2);
 	    denomPot =(vecFPot[i][j].getY()-vecFPot[xi][xj].getY())*(y1-x1) -(vecFPot[i][j].getX()-vecFPot[xi][xj].getX())*(y2-x2);
@@ -70,8 +67,7 @@ std::vector<double> biotSavartGauge::getWindingObsPotFast(int &xi,int &xj,std::v
 	    }
 	    double sigProd = dx*dy*sigma1*sigma2/rsq;
 	    double fluxmag=bfield[i][j].getZ()*bfield[xi][xj].getZ()*dx*dy/rsq;
-	      // full wind/hel
-	    //std::cout<<"dnom reveal pot is "<<denomRevealPot<<" "<<RfieldPot[i][j].getY()<<" "<<RfieldPot[xi][xj].getY()<<" "<<RfieldPot[i][j].getX()<<" "<<RfieldPot[xi][xj].getX()<<"\n";
+	    // full wind/hel
 	    windRateCur = windRateCur + sigProd*denomCur;
 	    windRatePot = windRatePot + sigProd*denomPot;
 	    helRateCur = helRateCur + denomCur*fluxmag;
@@ -79,7 +75,7 @@ std::vector<double> biotSavartGauge::getWindingObsPotFast(int &xi,int &xj,std::v
 	    // vel only  wind/hel
 	    velOnlyRate = velOnlyRate + sigProd*denomVel;
 	    velOnlyRateHel = velOnlyRateHel +denomVel*fluxmag;
-	    // reveal only wind/he
+	    // reveal only wind/hel
 	  }
 	} 
       }
@@ -123,8 +119,6 @@ std::vector<double> biotSavartGauge::getWindingObsPotFastPreCalc(int &xi,int &xj
   }else{
     sigma1=0.0;
   }
-  //std::cout<<"co is "<<magCutOff<<"\n";
-  //std::cout<<"in  here "<<nx<<" "<<ny<<" break\n";
   int nosample =0;
   for(int i=0;i<nx;i=i+downsampleFAC){
     for(int j=0;j<ny;j=j+downsampleFAC){
