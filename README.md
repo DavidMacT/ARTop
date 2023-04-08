@@ -123,27 +123,28 @@ There are several Python scripts that allow for the easy production of maps and 
 The variables for creating maps are:
 
 ```
-'bz':               z-component of the magnetic field
-'vz':               z-component of the field line velocity field
-'sz':               z-component of the Poynting flux
-'wind':             winding
-'windvalCur':       current-carrying winding
-'windvalPot':       potential winding
-'windvalBraidOnly': braiding winding
-'hel':              helicity
-'helvalCur':        current-carrying helicity
-'helvalPot':        potetnial helicity
-'helvalBraidOnly':  braiding helcity
-'deltaLflux':       delta winding flux
-'deltaHflux':       delta helecity flux
+`bz`         :  z-component of mag. field (Gauss)
+`vz`         :  z-component of vel. field (km/s)
+`sz`         :  z-component of Poynting flux (Gauss^2km/s)
+`windCur`    :  current-carrying part of field line winding rate (km^2/s)
+`helCur`     :  current-carrying part of field line helicity rate (Gauss^2km^2/s)
+`windPot`    :  potential part of field line winding rate (km^2/s)
+`helPot`     :  potential part of field line helicity rate (Gauss^2km^2/s)
+`windBraid`  :  braiding component of winding rate  (km^2/s)
+`helBraid`   :  braiding component of helicity rate (Gauss^2km^2/s)
+`wind`       :  total field line winding rate (km^2/s)
+`hel`        :  total field line helicity rate (Gauss^2km^2/s)
+`deltaL `    :  field line delta winding rate (km^2/s)
+`deltaH`     :  field line delta helicity rate (Gauss^2km^2/s)
 ```
-There are also variables for creating time series:
+There are also variables (all per second) for creating time series:
 
 ```
-'totWindCur':           total current-carrying winding
+'WindCur':           total current-carrying winding
+'HelCur':            total current-carrying helcity/second 
 'totWindPot':           total potential winding 
 'totWindBraid':         total braiding winding
-'totHelCur':            total current-carrying helcity 
+
 'totHelPot':            total potential helicity
 'totHelBraid':         	total braiding helicity 
 'totWind':              total winding
