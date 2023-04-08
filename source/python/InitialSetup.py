@@ -141,6 +141,8 @@ if downloadData.casefold() == 'true' or downloadData.casefold() == 'manual':
 
 # Get details from specifications.txt
 specLoc = os.path.join(outputDir,'specifications.txt')
+if not os.path.isfile(specLoc):
+    raise FileNotFoundError('specifications.txt does not exist, please create/place this in the output folder.')
 specDetails = readSpec(specLoc)
 nx = specDetails[1]
 ny = specDetails[2]
@@ -152,6 +154,8 @@ ntt = str(int(nt)-1)
 argDAVE = inputDir+gap+regionNum+gap+nx+gap+ny+gap+'0'+gap+ntt+gap+velSmooth
 cwd = os.getcwd()
 pathDAVE = os.path.join('.',cwd,'source','cpp','getVelocity')
+if not os.path.isfile(pathDAVE):
+    raise FileNotFoundError('getVelocity not found, so no velocity files will be produced. Did you run make before running run_ARTop.py?')
 cmd = pathDAVE+gap+argDAVE
 subprocess.call(cmd,shell=True)
 
