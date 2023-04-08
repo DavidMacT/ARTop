@@ -130,8 +130,8 @@ windCur    :  current-carrying part of field line winding rate (km^2/s)
 helCur     :  current-carrying part of field line helicity rate (Gauss^2km^2/s)
 windPot    :  potential part of field line winding rate (km^2/s)
 helPot     :  potential part of field line helicity rate (Gauss^2km^2/s)
-windBraid  :  braiding component of winding rate  (km^2/s)
-helBraid   :  braiding component of helicity rate (Gauss^2km^2/s)
+windBraid  :  braiding component of field line winding rate (km^2/s)
+helBraid   :  braiding component of field line helicity rate (Gauss^2km^2/s)
 wind       :  total field line winding rate (km^2/s)
 hel        :  total field line helicity rate (Gauss^2km^2/s)
 deltaL     :  field line delta winding rate (km^2/s)
@@ -140,19 +140,15 @@ deltaH     :  field line delta helicity rate (Gauss^2km^2/s)
 There are also variables for creating time series:
 
 ```
-'WindCur':           total current-carrying winding
-'HelCur':            total current-carrying helcity/second 
-'totWindPot':           total potential winding 
-'totWindBraid':         total braiding winding
-
-'totHelPot':            total potential helicity
-'totHelBraid':         	total braiding helicity 
-'totWind':              total winding
-'totHel':               total helicity
-'deltaLflux':           delta winding flux
-'deltaHflux':           delta helicity flux
+windCur   : current-carrying part of winding rate (km^4/s)
+helCur    : current-carrying part of field line helicity rate (Gauss^2km^4/s)
+windPot   : potential part of winding rate (km^4/s)
+helPot    : potential part of helicity rate (Gauss^2km^4/s)
+windBraid : braiding component of winding rate (km^4/s)
+helBraid  : braiding component of helicity rate (Gauss^2km^4/s)
+wind      : total winding rate (km^4/s)
+hel       : total helicity rate (Gauss^2km^4/s)
+dL        : delta winding rate (km^$/s)
+dH        : delta helicity rate (Gauss^2km^4/s)
 ```
-
-These variables are actually time derivatives but it is straightforward to produce their accummulations integrated in time. 
-
-The output files containing these variables are located in the Data folder of the output directory. 
+These are the variable names used in the code. For examples of how to read and analyse them, the user is directed to the Jupyter notebooks that accompany the code.
