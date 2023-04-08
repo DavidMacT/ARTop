@@ -346,8 +346,8 @@ def readMap(outputDir,fileNum,varCode):
     helBraid   :  braiding component of helicity
     wind       :  total winding
     hel        :  total helicity
-    deltaLf    :  delta winding flux
-    deltaHf    :  delta helicity flux
+    deltaL     :  delta winding flux
+    deltaH     :  delta helicity flux
 
 
     '''
@@ -368,7 +368,7 @@ def readMap(outputDir,fileNum,varCode):
 
     # Read and sort data files
     df = pd.read_table(filePath, sep=' ',header=None)
-    df.columns = ['X1', 'X2', 'bz', 'vz', 'sz', 'windCur', 'helCur', 'windPot', 'helPot', 'windBraid', 'helBraid', 'wind', 'hel', 'deltaLf', 'deltaHf']
+    df.columns = ['X1', 'X2', 'bz', 'vz', 'sz', 'windCur', 'helCur', 'windPot', 'helPot', 'windBraid', 'helBraid', 'wind', 'hel', 'deltaL', 'deltaH']
     n = 10
     df.drop(df.tail(n).index,inplace=True)
     df.sort_values(by=['X1','X2'],inplace=True)
