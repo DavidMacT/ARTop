@@ -97,7 +97,20 @@ def downloadMag(start,end,inputFolder,sharp,email):
                              a.jsoc.Segment('Bt'), a.jsoc.Segment('Br'),
                              a.jsoc.Notify(email))
     res = client.request_data(response,method='url-tar')
-    downL = client.get_request(res,path=inputFolder)
+    Done = False
+    t = 0
+    while t<90:
+        try:
+            client.get_request(res,path=inputFolder)
+            print('tar file downloaded')
+            Done = True
+            break
+        except:
+            time.sleep(2)
+            t+=1
+    if Done is False:
+        raise OSError('Your connection to JSOC may not be stable. You can try to download a tar file directly from the JSOC website, place it in the input folder and run the code with Download data = manual in read_data.txt') 
+    
     
 def removeNaNs(field):
     '''
