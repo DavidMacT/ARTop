@@ -122,7 +122,7 @@ if os.path.exists(outputDir) == False:
     os.mkdir(outputDir)
     
 if os.path.exists(os.path.join(outputDir,'Data')) == False:
-    Davidos.mkdir(os.path.join(outputDir,'Data'))    
+    os.mkdir(os.path.join(outputDir,'Data'))    
 
  
 # Check if download needed
