@@ -118,7 +118,7 @@ typing:
 Output variables
 ----------------
 
-There are several Python scripts that allow for the easy production of maps and time series. Examples of how to use the analysis routines are provided in Jupyter notebooks that accompany ARTop.
+There are several Python scripts that allow for the production of maps and time series. Examples of how to use the analysis routines are provided in Jupyter notebooks that accompany ARTop. Below are lists of the variables names used in the analysis routines of ARTop.
 
 The variables for creating maps are:
 
@@ -151,4 +151,4 @@ hel       : total helicity rate (Gauss^2km^4/s)
 dL        : delta winding rate (km^$/s)
 dH        : delta helicity rate (Gauss^2km^4/s)
 ```
-These are the variable names used in the code. For examples of how to read and analyse them, the user is directed to the Jupyter notebooks that accompany the code.
+
