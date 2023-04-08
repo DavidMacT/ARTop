@@ -102,7 +102,6 @@ def downloadMag(start,end,inputFolder,sharp,email):
     while t<90:
         try:
             client.get_request(res,path=inputFolder)
-            print('tar file downloaded')
             Done = True
             break
         except:
@@ -252,6 +251,10 @@ Main code:
 if downloadData.casefold() == 'true':
     downloadMag(startTime,endTime,inputDir,regionNum,regEmail)
 
+# Check that the tar file has reached the input folder
+if not glob.glob('*.tar'):
+    raise sys.exit('ERROR: tar file not found, possible connection issue. Consider a manual download (see online documentation).')
+    
 # Extract tar file to get FITS files
 for file in glob.glob(os.path.join(inputDir,'*.tar')):
     nameTar = file
