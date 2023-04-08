@@ -84,17 +84,23 @@ Registered email=mocenigo@palazzo_ducale.it
 
 `Region number` corresponds to the SHARP number of the active region and not the NOAA number. If you only know the NOAA number for a region and not the SHARP number, you can use the script `source/python/noaa_sharp.py` to find the SHARP number.
 
-`Download data` has three settings: `true` means that the code will automatically download the data and create the necessary input and parameter files; `false` assumes that the necessary input and parameter files already exist (e.g. from a previous run); `manual` assumes that the user has placed a tar file (containing the FITS files to be read) in the input folder. The code will then process this file to produce the necessary input and parameter files. This last option is for users with slow connection speeds. 
+`Download data` has three settings: 
+
+`true` means that the code will automatically download the data and create the necessary input and parameter files. 
+
+`false` assumes that the necessary input and parameter files already exist (e.g. from a previous run). 
+
+`manual` assumes that the user has placed a tar file (containing the FITS files to be read) in the input folder. The code will then process this file to produce the necessary input and parameter files. This last option is for users with slow connection speeds. 
 
 The time/date variables are self explanitory (always use two digits, e.g. 09, not 9). 
 
-`Velocity smoothing` corresponds to how the window size used in the DAVE4VM code. 
+`Velocity smoothing` corresponds to the window size used in the DAVE4VM code. 
 
 The directory variables require the FULL PATHS in order to work properly, e.g. `/home/folder/input_folder` and not just `input_folder`. 
 
 `Topology` means that you want to run the topological calculations.
 
-`Cutoff` is the minimum magnetic field strength that you wish to consider for the topological calculations. This value is measures in Gauss.
+`Cutoff` is the minimum magnetic field strength that you wish to consider for the topological calculations. This value is measured in Gauss.
 
 `Sampling` determines the resolution at which you perform the topological calculations. A value of 1 means that you include all the pixels in the calculation. A value of 3 means that you down sample the number of pixels by a factor of 3.
 
