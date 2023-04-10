@@ -49,7 +49,7 @@ ARTop's makefile is configured to read these libraries in this folder. If you wi
 
 Running the code
 ----------------
-Pease read through this entire section before running ARTop.
+Pease read through this entire section before running ARTop, as well as the 'running ARTop' guide that accompanies the code.
 
 
 In the main code directory, first type:
