@@ -14,6 +14,7 @@ import datetime
 from datetime import timedelta
 import tarfile
 import glob
+import drms
 
 '''
 MagDown.py
@@ -59,8 +60,8 @@ velSmooth = sys.argv[14]
 cutoff = sys.argv[15]
 sampling = sys.argv[16]
 
-startTime = startYear+'-'+startMonth+'-'+startDay+'T'+startHour+':00:00'
-endTime = endYear+'-'+endMonth+'-'+endDay+'T'+endHour+':12:00'
+startTime = startYear+'.'+startMonth+'.'+startDay+'_'+startHour+':00:00'
+endTime = endYear+'.'+endMonth+'.'+endDay+'_'+endHour+':12:00'
 
 
 def downloadMag(start,end,inputFolder,sharp,email):
@@ -75,8 +76,8 @@ def downloadMag(start,end,inputFolder,sharp,email):
 
     Input:
     ------
-    start      : start time (format YYYY-MM-DDTHH:00:00)
-    end        : end time (format YYYY-MM-DDTHH:00:00)
+    start      : start time (format YYYY.MM.DD_HH:00:00)
+    end        : end time (format YYYY.MM.DD_HH:00:00)
     inputFolder: where the fits files are saved
     sharp      : SHARP number of active region
     email      : email registered with JSOC
@@ -91,24 +92,11 @@ def downloadMag(start,end,inputFolder,sharp,email):
     for JSOC.
     '''
 
-    client = jsoc.JSOCClient()
-    response = client.search(a.Time(start,end), a.jsoc.Series('hmi.sharp_cea_720s'),
-                             a.jsoc.PrimeKey('HARPNUM',sharp), a.jsoc.Segment('Bp'),
-                             a.jsoc.Segment('Bt'), a.jsoc.Segment('Br'),
-                             a.jsoc.Notify(email))
-    res = client.request_data(response,method='url-tar')
-    Done = False
-    t = 0
-    while t<90:
-        try:
-            client.get_request(res,path=inputFolder)
-            Done = True
-            break
-        except:
-            time.sleep(2)
-            t+=1
-    if Done is False:
-        raise OSError('Your connection to JSOC may not be stable. You can try to download a tar file directly from the JSOC website, place it in the input folder and run the code with Download data = manual in read_data.txt') 
+    client = drms.Client(email=email, verbose=True) 
+    query_string = 'hmi.sharp_cea_720s['+sharp+']['+start+'-'+end+']'+'{Bp,Br,Bt}'
+    export_request = client.export(query_string, method='url-tar', protocol='fits')
+    export_request.wait()
+    export_request.download(inputFolder)
     
     
 def removeNaNs(field):
