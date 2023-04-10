@@ -49,7 +49,7 @@ ARTop's makefile is configured to read these libraries in this folder. If you wi
 
 Running the code
 ----------------
-Pease read through this entire section before running ARTop, as well as the 'running ARTop' guide that accompanies the code.
+Pease read through this entire section before running ARTop.
 
 
 In the main code directory, first type:
@@ -90,7 +90,7 @@ Registered email=mocenigo@palazzo_ducale.it
 
 `false` assumes that the necessary input and parameter files already exist (e.g. from a previous run). 
 
-`manual` assumes that the user has placed a tar file (containing the FITS files to be read) in the input folder (which, of course, must also be created by the user in this case). The code will then process this file to produce the necessary input and parameter files. This last option is for users with slow connection speeds. For more details on downloading tar files from the JSOC website, please cosult http://jsoc.stanford.edu/How_toget_data.html.
+`manual` assumes that the user has placed a tar file (containing the FITS files to be read) in the input folder (normally, this folder is created automatically by ARTop but in this instance, the user must create it). The code will then process this file to produce the necessary input and parameter files. This last option is for users with slow connection speeds or who already have the tar files they require. For more details on downloading tar files from the JSOC website, please cosult http://jsoc.stanford.edu/How_toget_data.html.
 
 The time/date variables are self explanitory (always use two digits, e.g. 09, not 9). 
 
