@@ -84,12 +84,12 @@ def downloadMag(start,end,inputFolder,sharp,email):
 
     Output:
     -------
-    Br, Bp and Bt fits files for every time dump between start and end
-    (inclusive) in inputFolder 	
+     in inputFolder 	
 
 
-    A tar file is downloaded - this is the preferred method of download 
-    for JSOC.
+    A tar file is downloaded to inputFolder, containing Br, Bp 
+    and Bt fits files for every time dump between start and end 
+    (inclusive). This is the preferred method of download for JSOC.
     '''
 
     client = drms.Client(email=email, verbose=True) 
@@ -240,7 +240,7 @@ if downloadData.casefold() == 'true':
     downloadMag(startTime,endTime,inputDir,regionNum,regEmail)
 
 # Check that the tar file has reached the input folder
-if not glob.glob('*.tar'):
+if not glob.glob(os.path.join(inputDir,'*.tar')):
     raise sys.exit('ERROR: tar file not found, possible connection issue. Consider a manual download (see online documentation).')
     
 # Extract tar file to get FITS files
@@ -249,7 +249,7 @@ for file in glob.glob(os.path.join(inputDir,'*.tar')):
 
 with tarfile.open(nameTar,'r') as tf:
     print('Opened tar file')
-    tf.extractall(os.path.join(os.getcwd(),inputDir))
+    tf.extractall(inputDir)
     print('All FITS files extracted')
     
 # Determine the number of time steps
