@@ -17,7 +17,8 @@ extern "C" {
 
 class dave4VM{
 public:
-  dave4VM(double &dxIn,double &dyIn,int &nxIn,int &nyIn);  
+  dave4VM(double &dxIn,double &dyIn,int &nxIn,int &nyIn);
+  void getDerivativesEdge(std::vector<std::vector<double> > &Bx,std::vector<std::vector<double> > &By,std::vector<std::vector<double> > &Bz,double &dx,double &dy);
   void getDerivatives(std::vector<std::vector<double> > &Bx,std::vector<std::vector<double> > &By,std::vector<std::vector<double> > &Bz,double &dx,double &dy);
   void productTerms(std::vector<std::vector<double> > &B1,std::vector<std::vector<double> > &B2,std::vector<std::vector<double> > &output);
   void sumTerms(std::vector<std::vector<double> > &B1,std::vector<std::vector<double> > &output);
