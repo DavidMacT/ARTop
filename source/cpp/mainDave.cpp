@@ -101,7 +101,7 @@ int main( int argc, const char* argv[] ){
      std::vector<std::vector<double> > bzt(nx,std::vector<double>(ny,0.0));
      
      bool checkRead = true;
-     std::cout<<"making velocity step "<<findex<<" from "<<startIndex<<" to "<<endIndex<<"\n";
+     std::cout<<"Making velocity step "<<findex<<" of "<<endIndex<<"\n";
      std::string bxLocCurrMinus = bxLoc;
      bxLocCurrMinus  += std::to_string(findex);
      bxLocCurrMinus  +=".txt";
