@@ -128,7 +128,7 @@ Read in the files
    ************************************************/
   
   for(int findex=fv1;findex<=fv2;findex++){
-    std::cout<<fv1<<" "<<fv2<<" "<<findex<<"\n";
+    std::cout<<"Topology calculation "<<findex<<" of "<<fv2<<"\n";
 
     //declare the vectors for the field variables:
     std::vector<std::vector<double> > vx(nx,std::vector<double>(ny,0.0));
