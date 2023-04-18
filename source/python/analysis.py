@@ -420,7 +420,7 @@ def readMap(outputDir,fileNum,varCode):
     elif varCode == 'vz':
         un = u.km/u.s
     elif varCode == 'sz':
-        un = u.gaus * u.gauss * u.km / u.s
+        un = u.gauss * u.gauss * u.km / u.s
     elif varCode == 'windCur':
         un = u.km * u.km / u.s
     elif varCode == 'helCur':
