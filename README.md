@@ -113,7 +113,7 @@ typing:
 
 `python run_ARTop.py`
 
-
+Note: when running different batches of parameters, we recommend that you use separate input and output folders for each set of parameters - don't cross the streams! 
 
 Output variables
 ----------------
