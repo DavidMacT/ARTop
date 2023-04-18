@@ -21,7 +21,7 @@ The installation of LAPACK and BLAS requires some extra steps which we now outli
 
 Note: depending on how your system is setup, you may need to install gfortran (https://gcc.gnu.org/fortran/) and binutils (https://www.gnu.org/software/binutils/).
 
-First, download LAPACK and BLAS from the above cites.
+First, download LAPACK and BLAS.
 
 In the BLAS folder type:
 
