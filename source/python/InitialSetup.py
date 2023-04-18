@@ -17,7 +17,8 @@ The inputs to this script are the variables from read_data.txt.
 hmi.sharp_cea_720s FITS files are downloaded and processed by 
 calling MagDown.py.
 
-Velocity maps are calculated by calling DAVE4vm.py
+Velocity maps are calculated by calling getVelocity (a C++ implementation 
+of the DAVE4VM algorithm).
 
 Potential field components are calculated by calling potentialbxby.py
 
