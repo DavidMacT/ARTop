@@ -148,7 +148,7 @@ windBraid : braiding component of winding rate (km^4/s)
 helBraid  : braiding component of helicity rate (Gauss^2km^4/s)
 wind      : total winding rate (km^4/s)
 hel       : total helicity rate (Gauss^2km^4/s)
-dL        : delta winding rate (km^$/s)
+dL        : delta winding rate (km^4/s)
 dH        : delta helicity rate (Gauss^2km^4/s)
 ```
 
