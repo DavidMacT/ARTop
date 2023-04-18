@@ -17,7 +17,11 @@ For users who do not have Python installed currently on their machines, we recom
 
 ------------------
 
-The installation of LAPACK and BLAS requires some extra steps which we now outline. First, download LAPACK and BLAS from the above cites. Note: depending on how your system is setup, you may need to install gfortran and binutils.
+The installation of LAPACK and BLAS requires some extra steps which we now outline. 
+
+Note: depending on how your system is setup, you may need to install gfortran and binutils.
+
+First, download LAPACK and BLAS from the above cites.
 
 In the BLAS folder type:
 
