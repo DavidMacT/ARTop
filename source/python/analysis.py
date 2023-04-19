@@ -462,9 +462,9 @@ def plot(X,Y,colour,label, ylabel,Name,unit, oplot = None, save=False, imagename
     plt.title( Name, loc='center', fontsize = 16)
     
     if unit == 'h':
-        u=[3600,'hour'] 
+        u=[3600,'hours'] 
     elif unit == 'm':
-        u=[60,'minute'] 
+        u=[60,'minutes'] 
     else:
         u=[1,'seconds'] 
     
