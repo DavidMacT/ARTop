@@ -491,6 +491,7 @@ def plot(X,Y,colour,label, ylabel,Name,unit, oplot = None, save=False, imagename
     plt.ylabel(ylabel)
     plt.xlabel('Time ('+ u[1] + ')')   
     plt.ylim([np.min(xx), np.max(xx)])
+    plt.xlim([np.min(X/u[0]),np.max(X/u[0])])
     plt.legend(loc=0, bbox_to_anchor=(1, 0.5), fontsize = 'x-small')
     plt.show()
 
