@@ -71,8 +71,14 @@ for i in range(startfl,endfl):
         Bxp=ifftn(ifftshift(Mx)).real
         Byp=ifftn(ifftshift(My)).real
 
-        Bxpf=np.reshape(Bxp.T,(L,1))
-        Bypf=np.reshape(Byp.T,(L,1))
+        BxpT = Bxp
+        BypT = Byp
+        
+        Bxp = BypT.T
+        Byp = BxpT.T
+        
+        Bxpf=np.reshape(Bxp,(L,1))
+        Bypf=np.reshape(Byp,(L,1))
         Nx = 'Bxp_'+regionNum+'_'
         Ny = 'Byp_'+regionNum+'_'
 
