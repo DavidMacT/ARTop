@@ -62,7 +62,7 @@ In the main code directory, first type:
 
 which will compile the C++ part of the code.
 
-The next file to consider is `read_data.txt`. This is the only file that needs to edited in order to run ARTop. Open `read_data.txt' to see a list like:
+The next file to consider is `read_data.txt`. This is the only file that needs to be edited in order to run ARTop. Open `read_data.txt' to see a list like:
 
 ```
 Region number=7115
