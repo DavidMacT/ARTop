@@ -4,6 +4,10 @@ Active Region Topology (ARTop) - a tool for studying topological quantities in s
 
 ARTop allows you to calculate and analyse topological signatures of solar active regions at the photosphere. The code downloads SHARP magnetograms and uses these to create maps and time series of quantities including magnetic helicity and magnetic winding fluxes. Analysis routines allow for the straightforward production of figures and for the detailed comparison of time series to flare times.
 
+If you use any part of this code in published work, please cite the paper
+
+K Alielden, D MacTaggart, Q Ming, C Prior and B Raphaldini, ARTop: an open-source tool for measuring active region topology at the solar photosphere, RAS Techniques and Instruments, Volume 2, Issue 1, January 2023, Pages 398–407, https://doi.org/10.1093/rasti/rzad029
+
 
 
 Installation
