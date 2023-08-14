@@ -151,8 +151,8 @@ class flares_time():
         return pd.DataFrame(labels)
         
 
-
-""" Get the flar data """
+'''
+""" Get the flare data """
    
 time_interval = ['2017-09-02 10:00:00', '2017-09-03 20:00:00']
 
@@ -169,3 +169,4 @@ flares.labels(required_time = 'event_peaktime') # The time could be event_peakti
 
 ## To specify the data of an Active region
 flares.labels(required_time = 'event_peaktime', AR = 12674) # put the number of the active region from the ar_noaanum column without quotations.
+'''
