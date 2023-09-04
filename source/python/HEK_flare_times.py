@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Sat Aug 12 10:05:45 2023
-@author: khd2
-"""
+
 import json
 import codecs
 import urllib
