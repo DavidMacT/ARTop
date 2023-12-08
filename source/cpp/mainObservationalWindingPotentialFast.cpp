@@ -391,16 +391,17 @@ Read in the files
 	outfile<<windvals[0]<<" "<<windvals[1]<<" "<<windvals[2]<<" "<<windvals[3]<<" "<<windvals[4]<<" "<<windvalCur<<" "<<helvalCur<<" "<<windvalPot<<" "<<helvalPot<<" "<<windvalVelOnly<<" "<<helvalVelOnly<<" "<<wind<<" "<<hel<<" "<<deltaLfluxden<<" "<<deltaHfluxden<<"\n";
      }
       // don't forget to upscale to account for missing values
-      outfile<<totWindCur*dx*dy*((nx*ny)/windingDat.size())<<"\n";
-      outfile<<totHelCur*dx*dy*((nx*ny)/windingDat.size())<<"\n";
-      outfile<<totWindPot*dx*dy*((nx*ny)/windingDat.size())<<"\n";
-      outfile<<totHelPot*dx*dy*((nx*ny)/windingDat.size())<<"\n";
-      outfile<<totWindVel*dx*dy*((nx*ny)/windingDat.size())<<"\n";
-      outfile<<totHelVel*dx*dy*((nx*ny)/windingDat.size())<<"\n";
-      outfile<<(totWindCur+totWindPot-totWindVel)*dx*dy*((nx*ny)/windingDat.size())<<"\n";
-      outfile<<(totHelCur+totHelPot-totHelVel)*dx*dy*((nx*ny)/windingDat.size())<<"\n";
-      outfile<<deltaLflux*dx*dy*((nx*ny)/windingDat.size())<<"\n";
-      outfile<<deltaHflux*dx*dy*((nx*ny)/windingDat.size())<<"\n";
+      double fac = double(nx*ny)/double(windingDat.size());
+      outfile<<totWindCur*dx*dy*fac<<"\n";
+      outfile<<totHelCur*dx*dy*fac<<"\n";
+      outfile<<totWindPot*dx*dy*fac<<"\n";
+      outfile<<totHelPot*dx*dy*fac<<"\n";
+      outfile<<totWindVel*dx*dy*fac<<"\n";
+      outfile<<totHelVel*dx*dy*fac<<"\n";
+      outfile<<(totWindCur+totWindPot-totWindVel)*dx*dy*fac<<"\n";
+      outfile<<(totHelCur+totHelPot-totHelVel)*dx*dy*fac<<"\n";
+      outfile<<deltaLflux*dx*dy*fac<<"\n";
+      outfile<<deltaHflux*dx*dy*fac<<"\n";
       outfile.close();
     }else{
       // if we are here then at least one of the magnetic field/velocity files is absent so no calculations are performed.
