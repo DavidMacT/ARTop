@@ -370,12 +370,12 @@ Read in the files
       for(int i=0;i<windingDat.size();i++){
 	std::vector<double> windvals = windingDat[i];
 	// the minus 1 is part of the formula.
-	double windvalCur =(-1.0)*windvals[4];
-	double helvalCur = (-1.0)*windvals[5];
-	double windvalPot =(-1.0)*windvals[6];
-	double helvalPot = (-1.0)*windvals[7];
-	double windvalVelOnly = (-1.0)*windvals[8];
-	double helvalVelOnly = (-1.0)*windvals[9];
+	double windvalCur =(-1.0)*windvals[5];
+	double helvalCur = (-1.0)*windvals[6];
+	double windvalPot =(-1.0)*windvals[7];
+	double helvalPot = (-1.0)*windvals[8];
+	double windvalVelOnly = (-1.0)*windvals[9];
+	double helvalVelOnly = (-1.0)*windvals[10];
 	double wind =windvalCur+windvalPot-windvalVelOnly;
 	double hel =helvalCur+helvalPot-helvalVelOnly;
 	totWindCur=totWindCur+windvalCur;
