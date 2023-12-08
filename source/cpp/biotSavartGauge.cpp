@@ -86,6 +86,7 @@ std::vector<double> biotSavartGauge::getWindingObsPotFast(int &xi,int &xj,std::v
   output.push_back(x2);
   output.push_back(bfield[xi][xj].getZ());
   output.push_back(vfield[xi][xj].getZ());
+  output.push_back((vfield[xi][xj].getZ()*bfield[xi][xj].getY()-vfield[xi][xj].getY()*bfield[xi][xj].getZ())*bfield[xi][xj].getY()-(vfield[xi][xj].getX()*bfield[xi][xj].getZ()-vfield[xi][xj].getZ()*bfield[xi][xj].getX())*bfield[xi][xj].getX()); // sz
   output.push_back(windfrac*windRateCur*nx*ny/nosample);
   output.push_back(windfrac*helRateCur*nx*ny/nosample);
   output.push_back(windfrac*windRatePot*nx*ny/nosample);
