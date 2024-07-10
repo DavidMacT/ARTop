@@ -281,16 +281,16 @@ def integrate_series(df):
     dH_int        = np.zeros(nt)
 
     for i in range(nt):
-        windCur_int[i]   = np.trapz(windCur[0:i], dx=dt)
-        windPot_int[i]   = np.trapz(windPot[0:i], dx=dt)
-        windBraid_int[i] = np.trapz(windBraid[0:i], dx=dt)
-        helCur_int[i]    = np.trapz(helCur[0:i], dx=dt)
-        helPot_int[i]    = np.trapz(helPot[0:i], dx=dt)
-        helBraid_int[i]  = np.trapz(helBraid[0:i], dx=dt)
-        wind_int[i]      = np.trapz(wind[0:i], dx=dt)
-        hel_int[i]       = np.trapz(hel[0:i], dx=dt)
-        dL_int[i]        = np.trapz(dL[0:i], dx=dt)
-        dH_int[i]        = np.trapz(dH[0:i], dx=dt)
+        windCur_int[i]   = np.trapz(windCur[0:i+1], dx=dt)
+        windPot_int[i]   = np.trapz(windPot[0:i+1], dx=dt)
+        windBraid_int[i] = np.trapz(windBraid[0:i+1], dx=dt)
+        helCur_int[i]    = np.trapz(helCur[0:i+1], dx=dt)
+        helPot_int[i]    = np.trapz(helPot[0:i+1], dx=dt)
+        helBraid_int[i]  = np.trapz(helBraid[0:i+1], dx=dt)
+        wind_int[i]      = np.trapz(wind[0:i+1], dx=dt)
+        hel_int[i]       = np.trapz(hel[0:i+1], dx=dt)
+        dL_int[i]        = np.trapz(dL[0:i+1], dx=dt)
+        dH_int[i]        = np.trapz(dH[0:i+1], dx=dt)
 
     data = {'times(seconds)': times,
             'windCur_int'   : windCur_int,
