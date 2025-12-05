@@ -46,7 +46,7 @@ std::vector<double> biotSavartGauge::getWindingObsPotFast(int &xi,int &xj,std::v
     for(int j=0;j<ny;j=j+downsampleFAC){
       nosample++;
       // handle the x=y case
-      if(i != xi && j != xj){
+      if(i != xi || j != xj){
       	y1 = leftx + i*dx;
        	y2 = lefty + j*dy;
 	double bmagY = std::sqrt(bfield[i][j].getX()*bfield[i][j].getX()+bfield[i][j].getY()*bfield[i][j].getY()+bfield[i][j].getZ()*bfield[i][j].getZ());
@@ -125,7 +125,7 @@ std::vector<double> biotSavartGauge::getWindingObsPotFastPreCalc(int &xi,int &xj
     for(int j=0;j<ny;j=j+downsampleFAC){
       nosample++;
       // handle the x=y case, currently just set its denisty to zero [hmmm];
-      if(i != xi && j != xj){
+      if(i != xi || j != xj){
 	double bmagY =  bmagCVec[i][j];
 	int di = xi-i;
 	int dj = xj-j;
